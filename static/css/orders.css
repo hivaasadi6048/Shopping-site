@@ -1,0 +1,288 @@
+/*  وارد کردن اطلاعات خرید  */
+.checkout-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 24px auto;
+}
+
+.checkout-details,
+.checkout-summary {
+  flex: 1;
+  min-width: 320px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.checkout-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--primary);
+}
+
+.checkout-form .form-group {
+  margin-bottom: 14px;
+}
+
+.checkout-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  width: 90%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.checkout-form textarea {
+  min-height: 80px;
+}
+
+.btn-checkout {
+  display: inline-block;
+  padding: 10px 16px;
+  background: var(--success);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-checkout:hover {
+  background: #1e6f2e;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+.summary-table th,
+.summary-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+}
+.summary-table th {
+  background: #f9fafb;
+  font-weight: 700;
+}
+
+.payment-method {
+  margin-top: 12px;
+}
+.payment-method label {
+  margin-right: 8px;
+}
+.summary-table tr:nth-child(even) 
+{ background: #fdfdfd; 
+}
+.product-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+ }
+.product-link:hover {
+  color: var(--accent);
+  text-decoration: underline; 
+}
+
+/* لیست فاکتورهای صادر شده*/
+.invoice-wrap {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.invoice-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.invoice-header {
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+}
+
+.invoice-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.invoice-body {
+  padding: 20px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+}
+
+.invoice-table th {
+  background: #f9fafb;
+  font-weight: 700;
+}
+
+.invoice-table tr:nth-child(even) {
+  background: #fdfdfd;
+}
+
+.order-id {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.total-price {
+  font-weight: 700;
+  color: var(--success);
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.status.issued {
+  background: #d1fae5;
+  color: #065f46;
+}
+.status.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.status.other {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-download {
+  display: inline-block;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.btn-download:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.invoice-empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* جزئیات فاکتور بعد از صادر شدن */
+.invoice-detail-wrap {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.invoice-detail-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.invoice-detail-header h2 {
+  margin: 0 0 16px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.invoice-detail-meta p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.invoice-detail-subtitle {
+  margin: 20px 0 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.invoice-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.invoice-detail-table th,
+.invoice-detail-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+}
+
+.invoice-detail-table th {
+  background: #f9fafb;
+  font-weight: 700;
+}
+
+.invoice-detail-table tr:nth-child(even) {
+  background: #fdfdfd;
+}
+
+.invoice-detail-actions {
+  text-align: right;
+}
+
+.btn-download {
+  display: inline-block;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.btn-download:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+
+
+
+
+
+
+

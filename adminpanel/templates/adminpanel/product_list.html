@@ -1,0 +1,113 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}لیست محصولات{% endblock %}
+
+{% block content %}
+
+<h2 class="admin-page-title">📦 لیست محصولات</h2>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>تصویر</th>
+        <th>نام محصول</th>
+        <th>قیمت</th>
+        <th>برند</th>
+        <th>دسته‌بندی</th>
+        <th>موجودی</th>
+        <th>وضعیت انبار</th>
+        <th>وضعیت</th>
+        <th>عملیات</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="admin-product-img">
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+
+        <td>{{ product.title }}</td>
+        <td>{{ product.price|floatformat:0 }} تومان</td>
+        <td>{{ product.brand.name }}</td>
+        <td>{{ product.category.name }}</td>
+
+        <td class="
+          {% if product.stock == 0 %}text-danger
+          {% elif product.stock < 5 %}text-warning
+          {% else %}text-success{% endif %}
+        ">
+          {{ product.stock }}
+        </td>
+
+        <td>
+          {% if product.stock_status == 'in_stock' %}
+            ✅ موجود
+          {% elif product.stock_status == 'pre_order' %}
+            🕓 پیش‌سفارش
+          {% else %}
+            ❌ ناموجود
+          {% endif %}
+        </td>
+
+        <td>
+          {% if product.active %}
+            <span class="status-badge status-active">فعال</span>
+          {% else %}
+            <span class="status-badge status-inactive">غیرفعال</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <div class="admin-actions">
+            <a href="{% url 'adminpanel:product_edit' product.id %}" class="admin-btn btn-edit">ویرایش</a>
+
+            <form action="{% url 'adminpanel:product_delete' product.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="admin-btn btn-delete"
+                onclick="return confirm('آیا از حذف این محصول مطمئن هستید؟');">
+                حذف
+              </button>
+            </form>
+
+            <a href="{% url 'adminpanel:product_images_list' product.id %}" class="admin-btn btn-images">تصاویر</a>
+            <a href="{% url 'adminpanel:product_specs_list' product.id %}" class="admin-btn btn-specs">مشخصات</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="9" class="text-muted">هیچ محصولی ثبت نشده است.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="{% url 'adminpanel:product_add' %}" class="admin-add-btn">➕ افزودن محصول جدید</a>
+
+{% if is_paginated %}
+<div class="admin-pagination">
+  {% if page_obj.has_previous %}
+    <a class="page-btn" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if num == page_obj.number %}
+      <span class="page-btn active">{{ num }}</span>
+    {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+      <a class="page-btn" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a class="page-btn" href="?page={{ page_obj.next_page_number }}">بعدی</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

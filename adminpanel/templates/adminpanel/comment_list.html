@@ -1,0 +1,70 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مدیریت کامنت‌ها{% endblock %}
+
+{% block content %}
+<div class="comments-page">
+
+    <div class="page-header">
+        <h2>مدیریت کامنت‌ها</h2>
+    </div>
+
+    {% if comments %}
+    <div class="table-wrapper">
+        <table class="comments-table">
+            <thead>
+                <tr>
+                    <th>محصول</th>
+                    <th>نویسنده</th>
+                    <th>نظر</th>
+                    <th>امتیاز</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                <tr class="{% if not comment.active %}inactive{% endif %}">
+                    <td>{{ comment.product.title }}</td>
+                    <td>{{ comment.author }}</td>
+                    <td class="comment-text">
+                        {{ comment.body|truncatewords:20 }}
+                    </td>
+                    <td class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= comment.stars %}
+                                ⭐
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if comment.active %}
+                            <span class="badge active">فعال</span>
+                        {% else %}
+                            <span class="badge inactive">غیرفعال</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'adminpanel:comment_edit' comment.id %}" class="btn btn-edit">ویرایش</a>
+                            <form action="{% url 'adminpanel:comment_delete' comment.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete"
+                                  onclick="return confirm('حذف شود؟');">
+                                  حذف
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="empty-box">
+            هیچ کامنتی ثبت نشده است.
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

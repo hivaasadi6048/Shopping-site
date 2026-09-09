@@ -1,0 +1,240 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}صفحه اصلی | ZHIRO{% endblock %}
+
+{% block content %}
+
+<!-- اسلایدر اصلی -->
+<div id="mainSlider" class="carousel slider-section">
+    <div class="carousel-inner">
+        {% for b in banners %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if b.لینک %}
+                    <a href="{{ b.لینک }}">
+                        <img src="{{ b.تصویر.url }}" alt="{{ b.عنوان }}">
+                    </a>
+                {% else %}
+                    <img src="{{ b.تصویر.url }}" alt="{{ b.عنوان }}">
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="carousel-item active">
+                <img src="{% static 'images/default-banner.jpg' %}" alt="ZHIRO">
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="slider-navigation">
+
+    <div class="slider-buttons">
+        <button class="carousel-control-prev" type="button">‹</button>
+        <button class="carousel-control-next" type="button">›</button>
+    </div>
+
+    <div class="slider-dots">
+        {% for b in banners %}
+            <span class="slider-dot {% if forloop.first %}active{% endif %}"></span>
+        {% endfor %}
+    </div>
+
+</div>
+    
+    
+</div>
+
+<!-- دسته‌بندی‌های اصلی -->
+<section class="section-block">
+    <h4 class="section-title">
+        <a href="{% url 'products:product_list' %}" class="section-link">دسته‌بندی‌های اصلی</a>
+    </h4>
+
+    <div class="grid-categories">
+        {% for cat in top_categories %}
+            <a href="{% url 'products:product_list' %}?category={{ cat.slug }}" class="category-box">
+                <span>{{ cat.title }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- پیشنهاد ویژه -->
+<section class="section-block">
+    <h4 class="section-title">
+        <a href="{% url 'products:product_list' %}?special_offer=1" class="section-link">پیشنهاد ویژه</a>
+    </h4>
+
+    <div class="grid-5">
+        {% for product in special_offers %}
+            <div class="home-product-card">
+
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{{ product.image.url }}" class="home-product-img" alt="{{ product.title }}">
+                </a>
+
+                <h6 class="home-product-title">{{ product.title }}</h6>
+                <p class="home-product-price">{{ product.price }} تومان</p>
+
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="home-add-to-cart-icon">🛒</button>
+                </form>
+
+            </div>
+        {% empty %}
+            <p>فعلاً پیشنهادی ثبت نشده است.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- جدیدترین محصولات -->
+<section class="section-block">
+    <h4 class="section-title">
+        <a href="{% url 'products:product_list' %}?order=new" class="section-link">جدیدترین محصولات</a>
+    </h4>
+
+    <div class="grid-5">
+        {% for product in new_products %}
+            <div class="home-product-card">
+
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{{ product.image.url }}" class="home-product-img" alt="{{ product.title }}">
+                </a>
+
+                <h6 class="home-product-title">{{ product.title }}</h6>
+                <p class="home-product-price">{{ product.price }} تومان</p>
+
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="home-add-to-cart-icon">🛒</button>
+                </form>
+
+            </div>
+        {% empty %}
+            <p>فعلاً محصولی ثبت نشده است.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- پرفروش‌ترین‌ها -->
+<section class="section-block">
+    <h4 class="section-title">
+        <a href="{% url 'products:product_list' %}?best_seller=1" class="section-link">پرفروش‌ترین‌ها</a>
+    </h4>
+
+    <div class="grid-5">
+        {% for product in best_sellers %}
+            <div class="home-product-card">
+
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{{ product.image.url }}" class="home-product-img" alt="{{ product.title }}">
+                </a>
+
+                <h6 class="home-product-title">{{ product.title }}</h6>
+                <p class="home-product-price">{{ product.price }} تومان</p>
+
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="home-add-to-cart-icon">🛒</button>
+                </form>
+
+            </div>
+        {% empty %}
+            <p>هنوز محصولی به عنوان پرفروش علامت‌گذاری نشده.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- برندها -->
+<section class="section-block">
+    <h4 class="section-title">
+        <a href="{% url 'products:product_list' %}" class="section-link">برندها</a>
+    </h4>
+
+    <div class="brands-grid">
+        {% for brand in brands %}
+            <a href="{% url 'products:product_list' %}?brand={{ brand.slug }}" class="brand-item">
+                {% if brand.logo %}
+                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+                {% else %}
+                    <span>{{ brand.name }}</span>
+                {% endif %}
+            </a>
+        {% empty %}
+            <p>برندی ثبت نشده است.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- اسکریپت اسلایدر -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const slider = document.querySelector('#mainSlider');
+    const items = slider.querySelectorAll('.carousel-item');
+    const dots = slider.querySelectorAll('.slider-dot');
+
+    let current = 0;
+
+    function showSlide(index) {
+        items.forEach(item =>
+            item.classList.remove('active')
+        );
+
+        dots.forEach(dot =>
+            dot.classList.remove('active')
+        );
+
+        items[index].classList.add('active');
+
+        if(dots[index]){
+            dots[index].classList.add('active');
+        }
+
+        current = index;
+    }
+
+    function nextSlide() {
+
+        let next =
+            (current + 1) % items.length;
+
+        showSlide(next);
+    }
+
+    function prevSlide() {
+
+        let prev =
+            (current - 1 + items.length) % items.length;
+
+        showSlide(prev);
+    }
+
+    slider
+        .querySelector('.carousel-control-next')
+        .addEventListener('click', nextSlide);
+
+    slider
+        .querySelector('.carousel-control-prev')
+        .addEventListener('click', prevSlide);
+
+    dots.forEach((dot,index)=>{
+
+        dot.addEventListener('click',()=>{
+
+            showSlide(index);
+
+        });
+
+    });
+
+    setInterval(nextSlide,5000);
+
+});
+</script>
+
+{% endblock %}

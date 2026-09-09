@@ -1,0 +1,49 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مدیریت مشخصات فنی{% endblock %}
+
+{% block content %}
+
+<div class="spec-form-page">
+
+  <div class="spec-form-card">
+    <h2 class="spec-form-title">
+      {% if spec %}
+        ✏️ ویرایش ویژگی
+      {% else %}
+        ➕ افزودن ویژگی جدید
+      {% endif %}
+    </h2>
+
+    <form method="post" class="spec-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label>نام ویژگی</label>
+        {{ form.name }}
+      </div>
+
+      <div class="form-group">
+        <label>مقدار</label>
+        {{ form.value }}
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'adminpanel:product_specs_list' product.id %}"
+           class="btn-secondary">
+          ← بازگشت
+        </a>
+
+        <button type="submit" class="btn-primary">
+          {% if spec %}
+            💾 ذخیره تغییرات
+          {% else %}
+            ➕ افزودن ویژگی
+          {% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

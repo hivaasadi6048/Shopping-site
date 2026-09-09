@@ -1,0 +1,103 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مدیریت سفارش‌ها{% endblock %}
+
+{% block content %}
+<div class="orders-container order-list-page">
+
+  <h2 class="admin-title">🧾 مدیریت سفارش‌ها</h2>
+
+  {% if orders %}
+  <div class="orders-list">
+
+    {% for order in orders %}
+    <div class="order-item" data-order-id="{{ order.id }}">
+
+      <div class="order-main">
+        <div><b>#{{ order.id }}</b></div>
+        <div>{{ order.user.username }}</div>
+        <div>{{ order.get_total_price }} تومان</div>
+
+        <div>
+          {% if order.is_paid %}
+            <span class="badge paid">پرداخت‌شده</span>
+          {% else %}
+            <span class="badge unpaid">در انتظار</span>
+          {% endif %}
+        </div>
+
+        <div>
+          <span class="badge status">{{ order.status }}</span>
+        </div>
+      </div>
+
+      <div class="order-actions">
+        <a href="{% url 'adminpanel:order_update' order.id %}" class="btn-update">ویرایش</a>
+        <a href="{% url 'adminpanel:orders_status_update' order.id %}" class="btn-status">وضعیت</a>
+
+        {% if order.is_paid %}
+          <button class="btn-delete disabled" disabled>حذف</button>
+        {% else %}
+          <button class="btn-delete js-delete-btn" data-id="{{ order.id }}">حذف</button>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+  {% else %}
+    <p class="text-center">سفارشی وجود ندارد.</p>
+  {% endif %}
+</div>
+
+<!-- ===== Delete Modal ===== -->
+<div id="deleteModal" class="modal-overlay">
+  <div class="modal">
+    <h3>⚠️ حذف سفارش</h3>
+    <p>آیا از حذف این سفارش مطمئن هستید؟</p>
+
+    <form id="deleteForm" method="post">
+      {% csrf_token %}
+      <div class="modal-actions">
+        <button type="button" class="btn-status" id="cancelDelete">انصراف</button>
+        <button type="submit" class="btn-delete big">حذف قطعی</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<input type="hidden"
+       id="delete-url-template"
+       value="{% url 'adminpanel:order_delete' 0 %}">
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const modal = document.getElementById("deleteModal");
+  const form  = document.getElementById("deleteForm");
+  const urlTemplate = document
+    .getElementById("delete-url-template")
+    .value;
+
+  document.querySelectorAll(".js-delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const orderId = btn.dataset.id;
+
+      
+      form.action = urlTemplate.replace("0", orderId);
+
+      modal.classList.add("active");
+    });
+  });
+
+  document.getElementById("cancelDelete").addEventListener("click", () => {
+    modal.classList.remove("active");
+  });
+
+});
+</script>
+
+
+
+{% endblock %}

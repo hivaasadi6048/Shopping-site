@@ -1,0 +1,176 @@
+/* ===============================
+   Admin Products - List Page
+================================ */
+
+:root {
+  --bg: #f6f7fb;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --primary: #2563eb;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #dc2626;
+}
+
+/* ---------- Page Title ---------- */
+.admin-page-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--primary);
+}
+
+/* ---------- Table Wrapper ---------- */
+.admin-table-wrap {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+/* ---------- Table ---------- */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.admin-table thead {
+  background: #f3f4f6;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* ---------- Product Image ---------- */
+.admin-product-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+/* ---------- Stock Colors ---------- */
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger  { color: var(--danger); }
+
+/* ---------- Status Badges ---------- */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-active {
+  background: #ecfdf5;
+  color: var(--success);
+  border: 1px solid #bbf7d0;
+}
+
+.status-inactive {
+  background: #fef2f2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}
+
+/* ---------- Actions ---------- */
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-btn {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.admin-btn:hover {
+  background: #f3f4f6;
+}
+
+.btn-edit { border-color: var(--primary); color: var(--primary); }
+.btn-delete { border-color: var(--danger); color: var(--danger); }
+.btn-images { border-color: #0284c7; color: #0284c7; }
+.btn-specs { border-color: #6b7280; color: #6b7280; }
+
+/* ---------- Add Product Button ---------- */
+.admin-add-btn {
+  margin-top: 16px;
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.admin-add-btn:hover {
+  background: #1e40af;
+}
+
+/* ---------- Pagination ---------- */
+.admin-pagination {
+  margin: 24px 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.page-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ---------- Mobile Improvements ---------- */
+@media (max-width: 768px) {
+  .admin-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

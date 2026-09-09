@@ -1,0 +1,87 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مدیریت تصاویر محصول{% endblock %}
+
+{% block content %}
+
+<div class="image-manager-card">
+
+  <div class="image-manager-header">
+    <h2>🖼 تصاویر محصول: {{ product.title }}</h2>
+
+    <a href="{% url 'adminpanel:product_image_add' product.id %}"
+       class="btn-primary">
+      ➕ افزودن تصویر
+    </a>
+  </div>
+
+  <div class="image-table-wrap">
+    <table class="image-table">
+      <thead>
+        <tr>
+          <th>تصویر</th>
+          <th>Alt Text</th>
+          <th>تصویر اصلی</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for img in images %}
+        <tr>
+
+          <td data-label="تصویر">
+            <img src="{{ img.image.url }}" alt="{{ img.alt_text }}"
+                 class="product-thumb">
+          </td>
+
+          <td data-label="Alt Text">
+            {{ img.alt_text|default:"—" }}
+          </td>
+
+          <td data-label="اصلی">
+            {% if img.is_main %}
+              <span class="badge badge-success">اصلی</span>
+            {% else %}
+              <span class="badge badge-muted">معمولی</span>
+            {% endif %}
+          </td>
+
+          <td data-label="عملیات" class="image-actions">
+            <a href="{% url 'adminpanel:product_image_edit' img.id %}"
+               class="btn-secondary">
+              ✏️ ویرایش
+            </a>
+
+            <form method="post"
+                  action="{% url 'adminpanel:product_image_delete' img.id %}"
+                  class="inline-form">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn-danger"
+                      onclick="return confirm('آیا از حذف این تصویر مطمئن هستید؟')">
+                🗑 حذف
+              </button>
+            </form>
+          </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="empty-row">
+            تصویری برای این محصول ثبت نشده است.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="back-row">
+    <a href="{% url 'adminpanel:product_list' %}" class="btn-secondary">
+      ← بازگشت به لیست محصولات
+    </a>
+  </div>
+
+</div>
+
+{% endblock %}

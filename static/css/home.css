@@ -1,0 +1,276 @@
+/* -----------------------------------
+   اسلایدر اصلی
+----------------------------------- */
+.slider-section {
+  margin-bottom: 40px;
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.carousel-inner {
+  position: relative;
+  min-height: 500px;
+}
+
+.carousel img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.carousel-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  transform: translateY(0);
+  z-index: 1;
+}
+
+
+
+
+.slider-navigation{
+    position:absolute;
+    bottom:25px;
+    right:25px;
+    z-index:20;
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.slider-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.carousel-control-prev,
+.carousel-control-next{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#fff;
+    border:none;
+    border-radius:50%;
+
+    color:#555;
+    font-size:28px;
+    line-height:1;
+
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+}
+
+.carousel:hover .carousel-control-prev,
+.carousel:hover .carousel-control-next{
+    opacity:1;
+    visibility:visible;
+}
+
+.slider-dots{
+    display:flex;
+    gap:8px;
+}
+
+.slider-dot{
+    width:28px;
+    height:4px;
+    border-radius:999px;
+    background:rgba(255,255,255,.4);
+    transition:.3s;
+}
+
+.slider-dot.active{
+    width:40px;
+    background:#fff;
+}
+
+@media (max-width:768px){
+
+    .carousel-control-prev,
+    .carousel-control-next{
+        opacity:1 !important;
+        visibility:visible !important;
+    }
+
+}
+
+/* -----------------------------------
+   ساختار بخش‌ها
+----------------------------------- */
+.section-block {
+  margin: 50px 0;
+}
+
+.section-title {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.section-link {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.section-link:hover {
+  color: var(--brand);
+}
+
+/* -----------------------------------
+   گرید دسته‌بندی‌ها
+----------------------------------- */
+.grid-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.category-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.category-box:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* -----------------------------------
+   گرید ۵تایی محصولات
+----------------------------------- */
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 1200px) {
+  .grid-5 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .grid-5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* -----------------------------------
+   کارت محصول
+----------------------------------- */
+.home-product-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  transition: 0.2s;
+  color: rgb(10, 6, 253);
+}
+
+.product-card:hover {
+  border-color: var(--brand);
+}
+
+.home-product-img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.home-product-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-product-price {
+  color: #d00;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.home-add-to-cart-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-to-cart-icon:hover {
+  transform: scale(1.2);
+}
+
+/* -----------------------------------
+   برندها
+----------------------------------- */
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.brand-item {
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.brand-item img {
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand-item:hover {
+  color: var(--brand);
+}

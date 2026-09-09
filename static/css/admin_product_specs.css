@@ -1,0 +1,116 @@
+/* =====================
+   Page
+===================== */
+.specs-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* =====================
+   Header
+===================== */
+.specs-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.specs-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--blue);
+  margin: 0;
+}
+
+.specs-subtitle {
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+/* =====================
+   Table
+===================== */
+.specs-table-wrap {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+body.dark .specs-table-wrap {
+  background: var(--card-bg-dark);
+}
+
+/* =====================
+   Empty
+===================== */
+.empty-box {
+  background: #f9fafb;
+  padding: 40px;
+  text-align: center;
+  border-radius: var(--radius);
+  color: var(--text);
+  opacity: 0.7;
+}
+
+/* =====================
+   Buttons
+===================== */
+.back-btn {
+  margin-top: 24px;
+  display: inline-block;
+}
+
+/* =====================
+   Mobile Responsive
+===================== */
+@media (max-width: 768px) {
+
+  .specs-header {
+    align-items: stretch;
+  }
+
+  .specs-header a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    background: #fff;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    padding: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+
+  .admin-table td {
+    border: none;
+    padding: 6px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    opacity: 0.6;
+  }
+
+  .admin-actions {
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,59 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% load humanize %}
+
+{% block title %}📄 فاکتورهای من{% endblock %}
+
+{% block dashboard_content %}
+<div class="invoice-wrap">
+  <div class="invoice-card">
+    <div class="invoice-header">
+      <h3>📦 فاکتورهای من</h3>
+    </div>
+
+    <div class="invoice-body">
+      {% if invoices %}
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>شماره سفارش</th>
+            <th>تاریخ</th>
+            <th>مبلغ کل</th>
+            <th>وضعیت</th>
+            <th>مشاهده فاکتور</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for invoice in invoices %}
+          <tr>
+            <td class="order-id">#{{ invoice.order.id }}</td>
+            <td>{{ invoice.issued_at|date:"Y/m/d H:i" }}</td>
+            <td class="total-price">{{ invoice.total|intcomma }} تومان</td>
+            <td>
+              {% if invoice.status == 'issued' %}
+                <span class="status issued">صادر شده</span>
+              {% elif invoice.status == 'cancelled' %}
+                <span class="status cancelled">لغو شده</span>
+              {% else %}
+                <span class="status other">{{ invoice.status }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'orders:invoice_detail' invoice.id %}" class="btn-details">
+                🔍 مشاهده فاکتور
+              </a>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="invoice-empty">
+        <p>شما هنوز سفارشی ثبت نکرده‌اید.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

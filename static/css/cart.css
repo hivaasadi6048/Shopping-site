@@ -1,0 +1,191 @@
+.cart-wrap {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.cart-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--primary);
+  text-align: center;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.cart-table th,
+.cart-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+}
+
+.cart-table th {
+  background: #f9fafb;
+  font-weight: 700;
+}
+
+.cart-table tr:nth-child(even) {
+  background: #fdfdfd;
+}
+
+.cart-img {
+  width: 60px;
+  height: auto;
+  border-radius: 6px;
+}
+
+.product-link {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+.product-link:hover {
+  color: var(--primary);
+}
+
+.remove-link {
+  color: var(--accent);
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+.remove-link:hover {
+  color: #b91c1c;
+}
+
+.qty-form {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+.qty-input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.btn-update {
+  padding: 6px 10px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-update:hover {
+  background: var(--primary-dark);
+}
+
+.cart-actions {
+  margin: 16px 0;
+  text-align: right;
+}
+.btn-clear {
+  padding: 8px 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-clear:hover {
+  background: #b91c1c;
+}
+
+.cart-total {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  text-align: right;
+}
+
+.btn-checkout {
+  display: inline-block;
+  padding: 10px 16px;
+  background: var(--success);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.btn-checkout:hover {
+  background: #1e6f2e;
+}
+
+.cart-empty {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.btn-back {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.btn-back:hover {
+  background: var(--primary-dark);
+}
+
+
+/* ✅ حالت موبایل: تبدیل جدول به کارت‌ها */
+@media (max-width: 768px) {
+  .cart-table,
+  .cart-table thead,
+  .cart-table tbody,
+  .cart-table th,
+  .cart-table td,
+  .cart-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .cart-table thead {
+    display: none; /* مخفی کردن هدر جدول */
+  }
+
+  .cart-table tr {
+    margin-bottom: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 12px;
+  }
+
+  .cart-table td {
+    border: none;
+    padding: 8px 0;
+    text-align: right;
+    position: relative;
+  }
+
+  /* برچسب هر ستون به صورت قبل از مقدار */
+  .cart-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cart-img {
+    width: 100%;
+    max-width: 120px;
+    margin: auto;
+    display: block;
+  }
+}

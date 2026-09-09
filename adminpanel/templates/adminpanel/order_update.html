@@ -1,0 +1,145 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}ویرایش سفارش #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="orders-container order-edit-page">
+
+  <div class="card-admin">
+    <h2 class="admin-title">🧾 ویرایش سفارش #{{ order.id }}</h2>
+
+    <form method="post" id="orderForm">
+      {% csrf_token %}
+      {{ formset.management_form }}
+
+      <!-- ===== Customer Info ===== -->
+      <section class="section-card">
+        <h4>👤 مشخصات مشتری</h4>
+
+        <div class="form-grid">
+          <div class="form-group"><label>نام</label>{{ form.first_name }}</div>
+          <div class="form-group"><label>نام خانوادگی</label>{{ form.last_name }}</div>
+          <div class="form-group"><label>شماره تلفن</label>{{ form.phone_number }}</div>
+          <div class="form-group"><label>وضعیت پرداخت</label>{{ form.is_paid }}</div>
+          <div class="form-group full"><label>آدرس</label>{{ form.address }}</div>
+          <div class="form-group full"><label>یادداشت</label>{{ form.order_notes }}</div>
+          <div class="form-group"><label>وضعیت سفارش</label>{{ form.status }}</div>
+        </div>
+      </section>
+
+      <!-- ===== Order Items ===== -->
+      <section class="section-card">
+        <h4>🛍 محصولات سفارش</h4>
+
+        <table class="admin-table" id="order-items-table">
+          <thead>
+            <tr>
+              <th>محصول</th>
+              <th>موجودی</th>
+              <th>تعداد</th>
+              <th>قیمت</th>
+              <th>جمع</th>
+              <th>حذف</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in formset %}
+            {{ f.id }}
+            <tr class="order-row">
+              <td data-label="محصول">{{ f.product }}</td>
+              <td data-label="موجودی" class="stock-display">—</td>
+              <td data-label="تعداد">{{ f.quantity }}</td>
+              <td data-label="قیمت">{{ f.price }}</td>
+              <td data-label="جمع" class="line-total">0</td>
+              <td data-label="حذف">
+                {{ f.DELETE }}
+                <button type="button" class="btn-delete-ui" aria-label="حذف آیتم">
+                  🗑 حذف
+                </button>
+              </td>
+
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">💰 مجموع کل</td>
+              <td id="grand-total">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+
+      <!-- ===== Actions ===== -->
+      <div class="actions">
+        <a href="{% url 'adminpanel:order_list' %}" class="btn-secondary">بازگشت</a>
+        <button class="btn-primary">💾 ذخیره</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+const products = JSON.parse('{{ products_json|escapejs }}');
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  function updateTotals() {
+    let total = 0;
+
+    document.querySelectorAll(".order-row").forEach(row => {
+      if (row.classList.contains("removed")) return;
+
+      const qty = row.querySelector('input[name$="-quantity"]').value || 0;
+      const price = row.querySelector('input[name$="-price"]').value || 0;
+      const sum = qty * price;
+
+      row.querySelector(".line-total").textContent = sum.toLocaleString();
+      total += sum;
+
+      row.querySelector(".btn-delete-ui").style.background =
+        qty > 0 ? "#fecaca" : "#fee2e2";
+    });
+
+    document.getElementById("grand-total").textContent = total.toLocaleString();
+  }
+
+  // Product change
+  document.querySelectorAll('select[name$="-product"]').forEach(select => {
+    select.addEventListener("change", () => {
+      const row = select.closest(".order-row");
+      const product = products.find(p => p.id == select.value);
+      if (product) {
+        row.querySelector('input[name$="-price"]').value = product.price;
+        row.querySelector(".stock-display").textContent = product.stock;
+      }
+      updateTotals();
+    });
+  });
+
+  // Qty / Price change
+  document.querySelectorAll('input[name$="-quantity"], input[name$="-price"]').forEach(i =>
+    i.addEventListener("input", updateTotals)
+  );
+
+  // Delete with Undo
+  document.querySelectorAll(".btn-delete-ui").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const row = btn.closest(".order-row");
+      const checkbox = row.querySelector('input[name$="-DELETE"]');
+
+      row.classList.toggle("removed");
+      checkbox.checked = row.classList.contains("removed");
+      btn.textContent = checkbox.checked ? "↩️ بازگردانی" : "🗑";
+
+      updateTotals();
+    });
+  });
+
+  updateTotals();
+});
+
+
+</script>
+{% endblock %}

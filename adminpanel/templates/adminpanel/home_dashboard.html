@@ -1,0 +1,55 @@
+{% extends 'adminpanel/_admin_base.html' %}
+{% block title %}داشبورد مدیریت | ZHIRO STOR{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-header">
+  <h1>پنل مدیریت ZHIRO STOR</h1>
+  <p>کنترل و مدیریت بخش‌های اصلی فروشگاه</p>
+</section>
+
+<section class="dashboard-grid">
+
+  <a href="{% url 'adminpanel:product_list' %}" class="dash-card">
+    <div class="dash-card__icon">📦</div>
+    <div class="dash-card__content">
+      <h3>محصولات</h3>
+      <p>افزودن، ویرایش و مدیریت محصولات</p>
+    </div>
+  </a>
+
+  <a href="{% url 'adminpanel:order_list' %}" class="dash-card">
+    <div class="dash-card__icon">🧾</div>
+    <div class="dash-card__content">
+      <h3>سفارش‌ها</h3>
+      <p>بررسی و مدیریت سفارش‌های کاربران</p>
+    </div>
+  </a>
+
+  <a href="{% url 'adminpanel:comment_list' %}" class="dash-card">
+    <div class="dash-card__icon">💬</div>
+    <div class="dash-card__content">
+      <h3>کامنت‌ها</h3>
+      <p>تأیید و کنترل نظرات کاربران</p>
+    </div>
+  </a>
+
+  <a href="{% url 'adminpanel:brand_list' %}" class="dash-card">
+    <div class="dash-card__icon">🏷️</div>
+    <div class="dash-card__content">
+      <h3>برندها</h3>
+      <p>مدیریت برندهای فروشگاه</p>
+    </div>
+  </a>
+
+  <a href="{% url 'adminpanel:category_list' %}" class="dash-card">
+    <div class="dash-card__icon">📁</div>
+    <div class="dash-card__content">
+      <h3>دسته‌بندی‌ها</h3>
+      <p>ساختاردهی دسته‌بندی محصولات</p>
+    </div>
+  </a>
+
+</section>
+
+{% endblock %}

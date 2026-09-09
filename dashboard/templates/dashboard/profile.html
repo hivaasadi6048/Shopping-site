@@ -1,0 +1,11 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block dashboard_content %}
+<h2>پروفایل</h2>
+
+<form class="dashboard-form" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">ذخیره تغییرات</button>
+</form>
+{% endblock %}

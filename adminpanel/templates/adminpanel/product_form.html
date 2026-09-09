@@ -1,0 +1,81 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}{{ title|default:"افزودن / ویرایش محصول" }}{% endblock %}
+
+{% block content %}
+
+<div class="product-form-card">
+  <h2 class="product-form-title">
+    {{ title|default:"افزودن محصول جدید" }}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" class="product-form">
+    {% csrf_token %}
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>نام محصول</label>
+        {{ form.title }}
+      </div>
+
+      <div class="form-group">
+        <label>قیمت</label>
+        {{ form.price }}
+      </div>
+
+      <div class="form-group">
+        <label>برند</label>
+        {{ form.brand }}
+      </div>
+
+      <div class="form-group">
+        <label>دسته‌بندی</label>
+        {{ form.category }}
+      </div>
+
+      <div class="form-group full">
+        <label>توضیحات کوتاه</label>
+        {{ form.short_description }}
+      </div>
+
+      <div class="form-group full">
+        <label>توضیحات کامل</label>
+        {{ form.description }}
+      </div>
+
+      <div class="form-group">
+        <label>وضعیت فعال</label>
+        {{ form.active }}
+      </div>
+
+      <div class="form-group">
+        <label>موجودی انبار</label>
+        {{ form.stock }}
+      </div>
+
+      <div class="form-group">
+        <label>وضعیت موجودی</label>
+        {{ form.stock_status }}
+      </div>
+
+      <div class="form-group full">
+        <label>تصویر اصلی</label>
+        {{ form.image }}
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a href="{% url 'adminpanel:product_list' %}" class="btn-secondary">
+        ← بازگشت
+      </a>
+
+      <button type="submit" class="btn-primary">
+        💾 ذخیره
+      </button>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}

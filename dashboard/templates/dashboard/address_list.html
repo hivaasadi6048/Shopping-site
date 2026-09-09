@@ -1,0 +1,33 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block dashboard_content %}
+<h2>آدرس‌ها</h2>
+
+{% if addresses %}
+<ul class="address-list">
+  {% for address in addresses %}
+    <li>
+    <strong>{{ address.title }}</strong>
+    <span>{{ address.city }} - {{ address.address_line }}</span>
+
+    <form method="post"
+          action="{% url 'dashboard:delete_address' address.id %}">
+        {% csrf_token %}
+        <button type="submit" class="delete-btn">
+            حذف
+        </button>
+    </form>
+</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="muted">هنوز آدرسی ثبت نشده.</p>
+{% endif %}
+
+<h3>افزودن آدرس جدید</h3>
+<form class="dashboard-form" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">ثبت آدرس</button>
+</form>
+{% endblock %}

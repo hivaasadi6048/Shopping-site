@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}پنل مدیریت | ZHIRO STOR{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/admin_panel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin_products.css' %}">
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_product_form.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_product_images.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_product_image_form.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_product_specs.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_product_specs_form.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_orders.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_comments.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_brands.css' %}?v=2">
+  <link rel="stylesheet" href="{% static 'css/admin_category.css' %}?v=2">
+
+
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar__top">
+    <h1 class="logo">ZHIRO STOR</h1>
+
+    <div class="user-info">
+      {% if request.user.is_authenticated %}
+        {{ request.user.username }}
+      {% endif %}
+    </div>
+
+    <nav class="menu">
+      <a href="{% url 'adminpanel:home' %}"
+         class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        داشبورد
+      </a>
+
+      <a href="{% url 'adminpanel:product_list' %}"
+         class="{% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+        محصولات
+      </a>
+
+      <a href="{% url 'adminpanel:order_list' %}"
+         class="{% if request.resolver_match.url_name == 'order_list' %}active{% endif %}">
+        سفارش‌ها
+      </a>
+
+      <a href="{% url 'adminpanel:comment_list' %}"
+         class="{% if request.resolver_match.url_name == 'comment_list' %}active{% endif %}">
+        کامنت‌ها
+      </a>
+
+      <a href="{% url 'adminpanel:brand_list' %}"
+         class="{% if request.resolver_match.url_name == 'brand_list' %}active{% endif %}">
+        برندها
+      </a>
+
+      <a href="{% url 'adminpanel:category_list' %}"
+         class="{% if request.resolver_match.url_name == 'category_list' %}active{% endif %}">
+        دسته‌بندی‌ها
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar__bottom">
+    <button id="darkToggle" class="dark-toggle">🌙 / ☀️</button>
+
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'account_logout' %}" class="logout">خروج</a>
+    {% endif %}
+  </div>
+</aside>
+
+<button class="mobile-menu-btn" id="openSidebar">
+  ☰
+</button>
+
+
+
+<main class="main">
+
+  {% block dashboard %}
+  <!-- نمونه داشبورد -->
+  <section class="dashboard-cards">
+    <div class="card">
+      <span class="card__title">سفارش‌ها</span>
+      <span class="card__value">128</span>
+    </div>
+
+    <div class="card">
+      <span class="card__title">فروش امروز</span>
+      <span class="card__value">24,500,000</span>
+    </div>
+
+    <div class="card">
+      <span class="card__title">کاربران</span>
+      <span class="card__value">1,024</span>
+    </div>
+  </section>
+  {% endblock %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+<script>
+const sidebar = document.querySelector('.sidebar');
+const openBtn = document.getElementById('openSidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+openBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+  overlay.classList.remove('active');
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const toggleBtn = document.getElementById("darkToggle");
+  const body = document.body;
+
+  // load saved theme
+  if (localStorage.getItem("admin-theme") === "dark") {
+    body.classList.add("dark");
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", function () {
+      body.classList.toggle("dark");
+
+      if (body.classList.contains("dark")) {
+        localStorage.setItem("admin-theme", "dark");
+      } else {
+        localStorage.setItem("admin-theme", "light");
+      }
+    });
+  }
+
+});
+
+
+</script>
+
+
+
+
+</body>
+</html>

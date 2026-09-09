@@ -1,0 +1,75 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مشخصات فنی محصول{% endblock %}
+
+{% block content %}
+
+<div class="specs-page">
+
+  <div class="specs-header">
+    <h2>⚙️ مشخصات فنی</h2>
+    <p class="specs-subtitle">
+      محصول: <strong>{{ product.title }}</strong>
+    </p>
+
+    <a href="{% url 'adminpanel:product_spec_add' product.id %}"
+       class="btn-primary">
+      ➕ افزودن ویژگی جدید
+    </a>
+  </div>
+
+  {% if specs %}
+  <div class="specs-table-wrap">
+    <table class="admin-table specs-table">
+      <thead>
+        <tr>
+          <th>ویژگی</th>
+          <th>مقدار</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for spec in specs %}
+        <tr>
+          <td data-label="ویژگی">
+            {{ spec.key }}
+          </td>
+
+          <td data-label="مقدار">
+            {{ spec.value }}
+          </td>
+
+          <td data-label="عملیات" class="admin-actions">
+            <a href="{% url 'adminpanel:product_spec_edit' spec.id %}"
+               class="btn-update">
+              ✏️ ویرایش
+            </a>
+
+            <form method="post"
+                  action="{% url 'adminpanel:product_spec_delete' spec.id %}"
+                  class="inline-form">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn-delete"
+                      onclick="return confirm('حذف این ویژگی؟');">
+                🗑 حذف
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="empty-box">
+      هنوز هیچ مشخصاتی برای این محصول ثبت نشده است.
+    </div>
+  {% endif %}
+
+  <a href="{% url 'adminpanel:product_list' %}" class="btn-secondary back-btn">
+    ← بازگشت به محصولات
+  </a>
+
+</div>
+
+{% endblock %}

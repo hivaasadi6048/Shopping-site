@@ -1,0 +1,57 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}
+{% if brand %}ویرایش برند{% else %}افزودن برند{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="brand-form-page">
+
+    <div class="form-card">
+        <h2>
+            {% if brand %}
+                ویرایش برند
+            {% else %}
+                افزودن برند جدید
+            {% endif %}
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>نام برند</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label>توضیحات</label>
+                {{ form.description }}
+            </div>
+
+            <div class="form-group">
+                <label>لوگو</label>
+                {{ form.logo }}
+            </div>
+
+            {% if brand and brand.logo %}
+            <div class="current-logo">
+                <p>لوگوی فعلی:</p>
+                <img src="{{ brand.logo.url }}" class="preview-logo">
+            </div>
+            {% endif %}
+
+            <div class="form-actions">
+                <a href="{% url 'adminpanel:brand_list' %}" class="btn btn-secondary">
+                    بازگشت
+                </a>
+
+                <button type="submit" class="btn btn-success">
+                    {% if brand %}ذخیره تغییرات{% else %}ثبت برند{% endif %}
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

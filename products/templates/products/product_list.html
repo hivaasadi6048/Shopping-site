@@ -1,0 +1,251 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <!-- نوار مرتب‌سازی و دکمه فیلتر -->
+  <div class="sort-filter-bar">
+    <div class="sort-options">
+      <button class="sort-btn mobile-only btn-filter-toggle" type="button" data-target="#mobileFilter">فیلتر محصولات</button>
+      <a href="?sort=new{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="sort-btn {% if request.GET.sort == 'new' %}active{% endif %}">جدیدترین</a>
+      <a href="?sort=cheap{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="sort-btn {% if request.GET.sort == 'cheap' %}active{% endif %}">ارزان‌ترین</a>
+      <a href="?sort=expensive{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="sort-btn {% if request.GET.sort == 'expensive' %}active{% endif %}">گران‌ترین</a>
+      <a href="?sort=popular{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="sort-btn {% if request.GET.sort == 'popular' %}active{% endif %}">پرفروش‌ترین</a>
+    </div>
+  </div>
+
+  <div class="page-layout">
+    <!-- پنل فیلتر دسکتاپ -->
+    <aside class="filter-panel">
+      <form method="get" action="" class="filter-form">
+        <div class="filter-title">فیلتر محصولات</div>
+
+        <!-- محدوده قیمت (اسلایدر + نمایش اعداد) -->
+        <div class="filter-group">
+          <label>محدوده قیمت (تومان)</label>
+          <div class="range-wrap">
+            <input type="range" id="priceMin" name="price_min" min="{{ min_price }}" max="{{ max_price }}" step="500000" value="{{ request.GET.price_min|default:min_price }}">
+            <input type="range" id="priceMax" name="price_max" min="{{ min_price }}" max="{{ max_price }}" step="500000" value="{{ request.GET.price_max|default:max_price }}">
+            <div class="range-values">
+              <div class="price-range-item">
+                <small> از قیمت : </small>
+                <span id="minDisplay"></span>
+              </div>
+
+              <div class="price-range-item">
+                <small>تا قیمت: </small>
+                <span id="maxDisplay"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- برند -->
+        <div class="filter-group">
+          <label>برند</label>
+          <select name="brand">
+            <option value="">همه برندها</option>
+            {% for b in brands %}
+              <option value="{{ b.slug }}" {% if request.GET.brand == b.slug %}selected{% endif %}>{{ b.name }}</option>
+            {% empty %}
+              <option value="" disabled>برندی یافت نشد</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- حفظ مرتب‌سازی فعلی -->
+        {% if request.GET.sort %}
+          <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+        {% endif %}
+        {% if request.GET.category %}
+          <input type="hidden" name="category" value="{{ request.GET.category }}">
+        {% endif %}
+
+        <div class="filter-actions">
+          <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
+        </div>
+      </form>
+    </aside>
+
+
+
+
+    <!-- پنل فیلتر موبایل (کشویی) -->
+
+
+    <div class="mobile-filter-panel" id="mobileFilter">
+      <div class="mobile-filter-head">
+        <strong>فیلتر محصولات</strong>
+        <button type="button" class="close-btn" aria-label="بستن">✖</button>
+      </div>
+      <div class="mobile-filter-body">
+        <form method="get" action="" class="filter-form">
+          <div class="filter-group">
+            <label>محدوده قیمت (تومان)</label>
+            <div class="range-wrap">
+              <input type="range" id="mPriceMin" name="price_min" min="{{ min_price }}" max="{{ max_price }}" step="500000" value="{{ request.GET.price_min|default:min_price }}">
+              <input type="range" id="mPriceMax" name="price_max" min="{{ min_price }}" max="{{ max_price }}" step="500000" value="{{ request.GET.price_max|default:max_price }}">
+              <div class="range-values">
+                <div class="price-range-item">
+                  <small>از قیمت:</small>
+                  <span id="mMinDisplay"></span>
+                </div>
+
+              <div class="price-range-item">
+                <small>تا قیمت:</small>
+                <span id="mMaxDisplay"></span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>برند</label>
+            <select name="brand">
+              <option value="">همه برندها</option>
+              {% for b in brands %}
+                <option value="{{ b.slug }}" {% if request.GET.brand == b.slug %}selected{% endif %}>{{ b.name}}</option>
+              {% empty %}
+                <option value="" disabled>برندی یافت نشد</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          {% if request.GET.sort %}
+            <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+          {% endif %}
+          {% if request.GET.category %}
+            <input type="hidden" name="category" value="{{ request.GET.category }}">
+          {% endif %}
+
+          <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ستون محصولات -->
+    <section class="product-section">
+      {% if request.GET.category and current_category %}
+      <nav class="breadcrumb">
+        <a href="{% url 'pages:home' %}">خانه</a>
+        <span>/</span>
+        <a href="{% url 'products:product_list' %}">محصولات</a>
+        <span>/</span>
+        <span class="current">{{ current_category.title }}</span>
+      </nav>
+      {% endif %}
+      
+
+      {% if request.GET.price_min or request.GET.price_max %}
+      <div class="active-filter-box">
+
+        <strong>فیلتر قیمت:</strong>
+
+         از
+        {{ request.GET.price_min|default:"0"|intcomma }}
+
+        تا
+
+        {{ request.GET.price_max|default:"50000000"|intcomma }}
+
+         تومان
+
+      </div>
+      {% endif %}
+
+
+      <div class="product-grid">
+        {% for product in products %}
+        <article class="product-card">
+          <div class="card-inner">
+            <a href="{{ product.get_absolute_url }}" class="clean-link">
+              <div class="product-image">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                {% else %}
+                  <img src="{% static 'img/no-image.png' %}" alt="no image">
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">{{ product.title }}</h3>
+                {% if product.brand %}
+                  <div class="product-meta">برند: {{ product.brand }}</div>
+                {% endif %}
+              </div>
+            </a>
+
+            <div class="card-actions">
+              <div class="price-and-cart">
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn-cart">+</button>
+                </form>
+                <div class="product-price">{{ product.price|intcomma:False }} تومان</div>
+              </div>
+            </div>
+          </div>
+        </article>
+        {% empty %}
+          <p>محصولی یافت نشد.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- اسکریپت پنل فیلتر موبایل و اسلایدر قیمت -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // پنل فیلتر موبایل
+  const toggleBtn = document.querySelector('.btn-filter-toggle');
+  const mobilePanel = document.querySelector('#mobileFilter');
+  const closeBtn = mobilePanel?.querySelector('.close-btn');
+
+  toggleBtn?.addEventListener('click', () => mobilePanel.classList.add('show'));
+  closeBtn?.addEventListener('click', () => mobilePanel.classList.remove('show'));
+  mobilePanel?.addEventListener('click', (e) => { if (e.target === mobilePanel) mobilePanel.classList.remove('show'); });
+
+  // فرمت اعداد فارسی
+  const farsiNumber = (x) => (x || 0).toLocaleString('fa-IR');
+
+  // دسکتاپ
+  const min = document.getElementById('priceMin');
+  const max = document.getElementById('priceMax');
+  const minDisplay = document.getElementById('minDisplay');
+  const maxDisplay = document.getElementById('maxDisplay');
+  function syncDesktop() {
+    if (!min || !max) return;
+    const minVal = Math.min(+min.value, +max.value);
+    const maxVal = Math.max(+min.value, +max.value);
+    min.value = minVal; max.value = maxVal;
+    minDisplay.textContent = farsiNumber(minVal) + ' تومان';
+    maxDisplay.textContent = farsiNumber(maxVal) + ' تومان';
+  }
+  min?.addEventListener('input', syncDesktop);
+  max?.addEventListener('input', syncDesktop);
+  syncDesktop();
+
+  // موبایل
+  const mMin = document.getElementById('mPriceMin');
+  const mMax = document.getElementById('mPriceMax');
+  const mMinDisplay = document.getElementById('mMinDisplay');
+  const mMaxDisplay = document.getElementById('mMaxDisplay');
+  function syncMobile() {
+    if (!mMin || !mMax) return;
+    const minVal = Math.min(+mMin.value, +mMax.value);
+    const maxVal = Math.max(+mMin.value, +mMax.value);
+    mMin.value = minVal; mMax.value = maxVal;
+    mMinDisplay.textContent = farsiNumber(minVal) + ' تومان';
+    mMaxDisplay.textContent = farsiNumber(maxVal) + ' تومان';
+  }
+  mMin?.addEventListener('input', syncMobile);
+  mMax?.addEventListener('input', syncMobile);
+  syncMobile();
+});
+</script>
+{% endblock %}

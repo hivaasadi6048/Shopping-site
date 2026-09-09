@@ -1,0 +1,55 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}ویرایش کامنت{% endblock %}
+
+{% block content %}
+<div class="comment-form-page">
+
+    <div class="form-card">
+        <h2>ویرایش کامنت کاربر</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>محصول</label>
+                <div class="static-field">
+                    {{ comment.product.title }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>نویسنده</label>
+                <div class="static-field">
+                    {{ comment.author }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>متن کامنت</label>
+                {{ form.body }}
+            </div>
+
+            <div class="form-group">
+                <label>امتیاز</label>
+                {{ form.stars }}
+            </div>
+
+            <div class="form-check">
+                {{ form.active }}
+                <label for="id_active">فعال باشد؟</label>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'adminpanel:comment_list' %}" class="btn btn-secondary">
+                    بازگشت
+                </a>
+                <button type="submit" class="btn btn-success">
+                    ذخیره تغییرات
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

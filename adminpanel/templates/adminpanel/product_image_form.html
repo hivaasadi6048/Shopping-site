@@ -1,0 +1,51 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}مدیریت تصویر محصول{% endblock %}
+
+{% block content %}
+
+<div class="image-form-card">
+
+  <h2 class="form-title">
+    {% if image %}
+      ✏️ ویرایش تصویر
+    {% else %}
+      ➕ افزودن تصویر جدید
+    {% endif %}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" class="image-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label>تصویر</label>
+      {{ form.image }}
+    </div>
+
+    <div class="form-group">
+      <label>Alt Text</label>
+      {{ form.alt_text }}
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        {{ form.is_main }}
+        تصویر اصلی محصول
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <a href="{% url 'adminpanel:product_images_list' product.id %}"
+         class="btn-secondary">
+        ← بازگشت
+      </a>
+
+      <button type="submit" class="btn-primary">
+        {% if image %}💾 ذخیره تغییرات{% else %}➕ افزودن تصویر{% endif %}
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+{% endblock %}

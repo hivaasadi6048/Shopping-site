@@ -1,0 +1,41 @@
+<div class="tree-node" data-id="{{ node.id }}">
+
+  <div class="tree-row level-{{ level }}">
+
+    <div class="tree-left" style="padding-right: {{ level|add:1 }}rem;">
+
+      {% if node.children_list %}
+        <span class="toggle-btn">▶</span>
+      {% else %}
+        <span class="no-toggle"></span>
+      {% endif %}
+
+      <span class="node-title">{{ node.title }}</span>
+
+    </div>
+
+    <div class="tree-actions">
+      <a href="{% url 'adminpanel:category_edit' node.id %}" class="btn-update">
+        ویرایش
+      </a>
+
+      <form method="post"
+          action="{% url 'adminpanel:category_delete' node.id %}"
+          class="inline-form">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete">حذف</button>
+      </form>
+    </div>
+
+
+  </div>
+
+  {% if node.children_list %}
+    <div class="children-container hidden nested-sortable ">
+      {% for child in node.children_list %}
+        {% include "adminpanel/partials/category_node.html" with node=child level=level|add:1 %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>

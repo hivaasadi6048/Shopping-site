@@ -1,0 +1,52 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}
+{% if category %}ویرایش دسته{% else %}افزودن دسته{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="category-form-page">
+
+    <div class="form-card">
+        <h2>
+            {% if category %}
+                ویرایش دسته‌بندی
+            {% else %}
+                افزودن دسته جدید
+            {% endif %}
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>عنوان دسته</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label>دسته والد</label>
+                {{ form.parent }}
+            </div>
+
+            <div class="form-group">
+                <label>Slug</label>
+                {{ form.slug }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'adminpanel:category_list' %}"
+                   class="btn btn-secondary">
+                    بازگشت
+                </a>
+
+                <button type="submit"
+                        class="btn btn-success">
+                    {% if category %}ذخیره تغییرات{% else %}ثبت دسته{% endif %}
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

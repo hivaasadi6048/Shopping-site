@@ -1,0 +1,44 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block dashboard_content %}
+<h2>داشبورد</h2>
+<p class="muted">اطلاعات حساب کاربری شما</p>
+
+<div class="user-info-table">
+
+  <div class="info-cell">
+    <span class="label">نام کاربری</span>
+    <span class="value">{{ user.username }}</span>
+  </div>
+
+  <div class="info-cell">
+    <span class="label">ایمیل</span>
+    <span class="value">{{ user.email|default:"—" }}</span>
+  </div>
+
+  <div class="info-cell">
+    <span class="label">شماره تماس</span>
+    <span class="value">
+        {% if user.phone_number %}
+            {{ user.phone_number }}
+        {% else %}
+            ثبت نشده
+        {% endif %}
+    </span>
+</div>
+
+<div class="info-cell">
+    <span class="label">آدرس</span>
+    <span class="value">
+        {% if address %}
+            {{ address.city }} - {{ address.address_line }}
+        {% else %}
+            ثبت نشده
+        {% endif %}
+    </span>
+</div>
+
+  
+
+</div>
+{% endblock %}

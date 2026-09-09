@@ -1,0 +1,12 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    
+      phone_number = models.CharField(
+        max_length=11,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="شماره موبایل"
+    )

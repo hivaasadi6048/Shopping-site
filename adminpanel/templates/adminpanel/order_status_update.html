@@ -1,0 +1,35 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}تغییر وضعیت سفارش{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+  <div class="card-admin" style="max-width:520px;margin:0 auto">
+
+    <h2 class="admin-title">
+      🔄 تغییر وضعیت سفارش #{{ order.id }}
+    </h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-group">
+          {{ form.status.label_tag }}
+          {{ form.status }}
+        </div>
+      </div>
+
+      <div class="admin-actions" style="margin-top:1.5rem;justify-content:space-between">
+        <a href="{% url 'adminpanel:order_list' %}" class="btn-status">
+          🔙 بازگشت
+        </a>
+
+        <button type="submit" class="btn-update">
+          💾 ذخیره تغییرات
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

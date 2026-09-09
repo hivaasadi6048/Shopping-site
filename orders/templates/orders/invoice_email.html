@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="direction:rtl;font-family:tahoma">
+    <h2>فاکتور سفارش شما</h2>
+    <p>
+        {{ order.first_name }} عزیز  
+        <br>
+        فاکتور سفارش شماره <b>{{ order.id }}</b> به پیوست ارسال شده است.
+    </p>
+    <p>
+        مبلغ کل: <b>{{ order.get_total_price }} تومان</b>
+    </p>
+    <hr>
+    <p style="color:gray">
+        فروشگاه exeexe
+    </p>
+</body>
+</html>

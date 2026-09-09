@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+
+{% block head_title %}{% trans "تأیید ایمیل" %}{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <h1>{% trans "تأیید ایمیل" %}</h1>
+
+    {% if confirmation %}
+      {% user_display confirmation.email_address.user as user_display %}
+      {% if can_confirm %}
+        <p>
+          {% blocktrans with confirmation.email_address.email as email %}
+            لطفاً تأیید کنید که <a href="mailto:{{ email }}">{{ email }}</a> متعلق به کاربر {{ user_display }} است.
+          {% endblocktrans %}
+        </p>
+        {% url 'account_confirm_email' confirmation.key as action_url %}
+        <form method="post" action="{{ action_url }}">
+          {% csrf_token %}
+          {{ redirect_field }}
+          <button type="submit" class="btn">{% trans 'تأیید' %}</button>
+        </form>
+      {% else %}
+        <p>
+          {% blocktrans %}امکان تأیید ایمیل وجود ندارد چون قبلاً توسط حساب دیگری تأیید شده است.{% endblocktrans %}
+        </p>
+      {% endif %}
+    {% else %}
+      {% url 'account_email' as email_url %}
+      <p>
+        {% blocktrans %}لینک تأیید ایمیل منقضی شده یا نامعتبر است. لطفاً <a href="{{ email_url }}">درخواست جدید ارسال کنید</a>.{% endblocktrans %}
+      </p>
+    {% endif %}
+  </div>
+{% endblock %}

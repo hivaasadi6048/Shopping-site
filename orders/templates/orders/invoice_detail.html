@@ -1,0 +1,48 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load humanize %}
+
+{% block title %}📄 جزئیات فاکتور{% endblock %}
+
+{% block dashboard_content %}
+<div class="invoice-detail-wrap">
+  <div class="invoice-detail-card">
+    <div class="invoice-detail-header">
+      <h2>فاکتور {{ invoice.invoice_number }}</h2>
+    </div>
+
+    <div class="invoice-detail-meta">
+      <p><strong>تاریخ:</strong> {{ invoice.issued_at|date:"Y-m-d H:i" }}</p>
+      <p><strong>مبلغ کل:</strong> {{ invoice.total|intcomma }} تومان</p>
+      <p><strong>وضعیت:</strong> {{ invoice.get_status_display }}</p>
+    </div>
+
+    <h3 class="invoice-detail-subtitle">جزئیات سفارش</h3>
+    <table class="invoice-detail-table">
+      <thead>
+        <tr>
+          <th>محصول</th>
+          <th>تعداد</th>
+          <th>قیمت واحد (تومان)</th>
+          <th>جمع (تومان)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in invoice.items.all %}
+        <tr>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price|intcomma }}</td>
+          <td>{{ item.line_total|intcomma }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="invoice-detail-actions">
+      <a href="{% url 'orders:download_invoice' invoice.order.id %}" class="btn-download" target="_blank">
+        📄 دانلود PDF
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

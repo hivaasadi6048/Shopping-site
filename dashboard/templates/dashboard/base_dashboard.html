@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+      <div class="username">{{ user.username }}</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard:dashboard' %}">🏠 داشبورد</a>
+      <a href="{% url 'orders:my_invoices' %}">📦 سفارش‌ها</a>
+      <a href="{% url 'dashboard:profile' %}">👤 پروفایل</a>
+      <a href="{% url 'dashboard:address_list' %}">🏠 آدرس‌ها</a>
+      <a href="{% url 'dashboard:wishlist' %}">❤️ علاقه‌مندی‌ها</a>
+      <a href="{% url 'dashboard:change_password' %}">🔑 تغییر رمز</a>
+      <a class="logout" href="{% url 'account_logout' %}">🚪 خروج</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="dashboard-content">
+    {% block dashboard_content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}

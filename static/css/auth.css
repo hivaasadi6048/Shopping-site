@@ -1,0 +1,158 @@
+/* ------------------------------
+   فرم‌های احراز هویت (ورود، ثبت‌نام، خروج، تأیید ایمیل)
+------------------------------ */
+.auth-wrapper {
+  direction: rtl;
+  text-align: right;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 30px 24px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-control {
+  width: 85%;          
+  padding: 8px 10px;    
+  font-size: 2rem;    
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #f9f9f9;
+}
+
+
+
+.error {
+  color: #d00;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.form-error {
+  margin-bottom: 16px;
+  padding: 10px;
+  background: #ffe6e6;
+  border: 1px solid #f99;
+  border-radius: 6px;
+}
+
+
+.btn { 
+  background: var(--brand); 
+  color: #fff;
+  width: 92%;
+  height: 45px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+ }
+
+ .btn-small {
+  display: inline-block;
+  padding: 6px 12px;   /* کوچکتر از btn اصلی */
+  font-size: 0.9rem;   /* متن کوچکتر */
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.btn-small:hover {
+  background: var(--primary-dark);
+}
+
+  
+.auth-wrapper h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--brand);
+  text-align: center;
+  }
+  
+.auth-wrapper form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  }
+  
+.auth-wrapper input[type="text"],
+.auth-wrapper input[type="email"],
+.auth-wrapper input[type="password"] {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #f9f9f9;
+  transition: border 0.2s;
+  text-align: left;
+  direction: ltr;
+  }
+  
+.auth-wrapper input:focus {
+  border-color: var(--brand);
+  outline: none;
+  }
+  
+.auth-wrapper input[type="submit"],
+.auth-wrapper button {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  }
+  
+.auth-wrapper input[type="submit"]:hover,
+.auth-wrapper button:hover {
+    background: #e55;
+  }
+  
+.auth-wrapper p {
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  margin-top: 10px;
+  }
+  
+.auth-wrapper a {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+  }
+
+.auth-wrapper label {
+  display: block;
+  margin-bottom: 6px; 
+  font-weight: 600; 
+  color: #333;
+  text-align: right;
+  }
+
+
+
+  
+@media (max-width: 600px) {
+  .auth-wrapper {
+  margin: 40px 16px;
+  padding: 24px 16px;
+  }
+}
+  

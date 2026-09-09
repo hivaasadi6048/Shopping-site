@@ -1,0 +1,188 @@
+/* ===========================
+   CATEGORIES MODULE
+=========================== */
+
+.categories-page,
+.category-form-page {
+  padding:2rem;
+}
+
+.categories-table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+.categories-table th {
+  background:#f3f4f6;
+  padding:14px;
+  font-weight:700;
+}
+
+.categories-table td {
+  padding:14px;
+  border-bottom:1px solid #f1f5f9;
+}
+
+.categories-table tr:hover {
+  background:#f9fafb;
+}
+
+.cat-title {
+  font-weight:600;
+}
+
+.slug-cell {
+  color:#6b7280;
+  font-size:.9rem;
+}
+
+.parent-badge {
+  background:#e0f2fe;
+  color:#0369a1;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:.8rem;
+  font-weight:600;
+}
+
+.no-parent {
+  color:#9ca3af;
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+  .categories-table thead {
+    display:none;
+  }
+
+  .categories-table tr {
+    display:block;
+    background:#fff;
+    border-radius:14px;
+    margin-bottom:1rem;
+    padding:1rem;
+    box-shadow:0 6px 20px rgba(0,0,0,.06);
+  }
+
+  .categories-table td {
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border:none;
+  }
+
+  .categories-table td::before {
+    content: attr(data-label);
+    font-weight:700;
+  }
+
+  .actions {
+    flex-direction:column;
+  }
+}
+
+
+
+
+.category-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.category-tree {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.category-item {
+  border-radius: 10px;
+}
+
+.category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: .75rem 1rem;
+  border-radius: 10px;
+}
+
+.category-row:hover {
+  background: #eef2ff;
+}
+
+.category-title {
+  font-weight: 600;
+}
+
+.category-actions {
+  display: flex;
+  gap: .5rem;
+}
+
+.tree-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.inline-form {
+  display: inline;
+  margin: 0;
+}
+
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .6rem 1rem;
+  border-radius: 8px;
+  transition: .2s;
+}
+
+.tree-row:hover {
+  background: #eef2ff;
+}
+
+.tree-left {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.toggle-btn {
+  cursor: pointer;
+  font-size: .8rem;
+  transition: .2s;
+}
+
+.toggle-btn.open {
+  transform: rotate(90deg);
+}
+
+.children-container {
+  margin-right: 1.2rem;
+  border-right: 1px dashed #d1d5db;
+  padding-right: .8rem;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,383 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ZHIRO | فروشگاه لوازم جانبی{% endblock %}</title>
+
+    <!-- فقط CSS اختصاصی -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/utilities.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'css/products.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'css/orders.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}?v=2">
+
+</head>
+
+<body>
+<div class="container"><!-- ✅ کانتینر اصلی -->
+
+  <!-- ✅ نوار بالا -->
+  <nav class="main-navbar">
+    <div class="navbar-inner">
+
+      <!-- ✅ ردیف اول: لوگو + سرچ -->
+      <div class="navbar-top">
+        <a class="navbar-brand" href="{% url 'pages:home' %}">
+          <img src="{% static 'images/logo.png' %}" width="80" height="80" alt="ZHIRO">
+          <span>ZHIRO</span>
+        </a>
+
+        <form class="search-box" action="{% url 'products:product_list' %}" method="get">
+          <input class="search-input" type="search" name="q" placeholder="جستجو در محصولات...">
+        </form>
+      </div>
+
+      <!-- ✅ ردیف دوم: منوی دسکتاپ -->
+      <div class="navbar-bottom">
+        <ul class="nav-list">
+          <li class="nav-item"><a class="nav-link" href="{% url 'pages:home' %}">خانه</a></li>
+          <li class="nav-item has-mega">
+
+    <a class="nav-link" href="#">
+        دسته‌بندی‌ها
+    </a>
+
+    <div class="mega-menu">
+
+        <!-- ستون راست -->
+        <div class="mega-sidebar">
+
+            {% for parent in categories %}
+                <div
+                    class="sidebar-item {% if forloop.first %}active{% endif %}"
+                    data-category="{{ parent.id }}"
+                >
+                    {{ parent.title }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- ستون چپ -->
+        <div class="mega-content">
+
+            {% for parent in categories %}
+
+                <div
+                    class="mega-panel {% if forloop.first %}active{% endif %}"
+                    id="panel-{{ parent.id }}"
+                >
+
+                    {% for child in parent.children.all %}
+
+                        <div class="mega-column">
+
+                            <h4 class="mega-column-title">
+
+                                <a href="{% url 'products:product_list' %}?category={{ child.slug }}">
+                                    {{ child.title }}
+                                </a>
+
+                            </h4>
+
+                            {% for subchild in child.children.all %}
+
+                                <a
+                                    class="mega-link"
+                                    href="{% url 'products:product_list' %}?category={{ subchild.slug }}"
+                                >
+                                    {{ subchild.title }}
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'products:product_list' %}">محصولات</a></li>
+
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:dashboard' %}">پنل کاربری</a></li>
+            {% if user.is_superuser %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'adminpanel:home' %}">مدیریت</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">خروج</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">ورود</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">ثبت‌نام</a></li>
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cart:cart_detail' %}">
+              سبد خرید 
+              {% if cart|length %}
+                <span class="cart-badge">{{ cart|length }}</span>
+              {% endif %}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ نوار پایین موبایل -->
+  <nav class="mobile-nav">
+    <div class="mobile-inner">
+      <a href="{% url 'pages:home' %}" class="mobile-item"><span class="icon">🏠</span><div>خانه</div></a>
+      <button class="mobile-item" data-target="#mobileCategories"><span class="icon">📂</span><div>دسته‌بندی</div></button>
+      <a href="{% url 'cart:cart_detail' %}" class="mobile-item">
+        <span class="icon">🛒</span>
+        <div>سبد خرید</div>
+        {% if cart|length %}
+          <span class="badge">{{ cart|length }}</span>
+        {% endif %}
+      </a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard:dashboard' %}" class="mobile-item"><span class="icon">👤</span><div>حساب کاربری</div></a>
+      {% else %}
+        <a href="{% url 'account_login' %}" class="mobile-item"><span class="icon">👤</span><div>ورود/ثبت‌نام</div></a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ✅ پنل دسته‌بندی موبایل -->
+  <div class="mobile-categories" id="mobileCategories">
+    <div class="mobile-header">
+      <h5>دسته‌بندی‌ها</h5>
+      <button type="button" class="close-btn">✖</button>
+    </div>
+    <div class="mobile-body">
+
+{% for parent in categories %}
+{% if not parent.parent %}
+
+<div class="mobile-category">
+
+    <div class="mobile-parent">
+        <span>{{ parent.title }}</span>
+
+        {% if parent.children.exists %}
+        <button class="toggle-btn">⌄</button>
+        {% endif %}
+    </div>
+
+    {% if parent.children.exists %}
+    <div class="mobile-children">
+
+        {% for child in parent.children.all %}
+
+        <div class="mobile-child">
+
+            <div class="mobile-child-header">
+                <a href="{% url 'products:product_list' %}?category={{ child.slug }}">
+                    {{ child.title }}
+                </a>
+
+                {% if child.children.exists %}
+                <button class="toggle-btn">⌄</button>
+                {% endif %}
+            </div>
+
+            {% if child.children.exists %}
+            <div class="mobile-subchildren">
+
+                {% for subchild in child.children.all %}
+                <a href="{% url 'products:product_list' %}?category={{ subchild.slug }}">
+                    {{ subchild.title }}
+                </a>
+                {% endfor %}
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+</div>
+
+{% endif %}
+{% endfor %}
+
+</div>
+  </div>
+
+  <!-- ✅ محتوای اصلی -->
+  <div class="main-container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- ✅ Toast پیام‌ها -->
+  {% if messages %}
+    <div class="toast-container">
+      {% for message in messages %}
+        <div class="toast toast-{{ message.tags }}">
+          <div class="toast-body">{{ message }}</div>
+          <button class="toast-close">✖</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- ✅ فوتر -->
+<footer class="site-footer">
+  <div class="footer-container">
+
+    <!-- ستون ۱: لوگو و توضیح -->
+    <div class="footer-col">
+      <a href="{% url 'pages:home' %}" class="footer-brand">
+        <img src="{% static 'images/logo.png' %}" alt="ZHIRO" class="footer-logo">
+        <span>ZHIRO</span>
+      </a>
+      <p class="footer-text">
+      فروشگاه آنلاین ژیرو به صرفه ترین قیمت و سریعترین زمان ارسال      </p>
+    </div>
+
+    <!-- ستون ۲: لینک‌های سریع -->
+    <div class="footer-col">
+      <h5 class="footer-title">لینک‌های سریع</h5>
+      <ul class="footer-links">
+        
+        <li><a href="{% url 'pages:home' %}">خانه</a></li>
+        <li><a href="{% url 'account_login' %}">ورود</a></li>
+        <li><a href="{% url 'account_signup' %}">ثبت‌نام</a></li>
+        
+      </ul>
+    </div>
+
+    <!-- ستون ۳: دسته‌بندی‌ها -->
+    <div class="footer-col">
+      <h5 class="footer-title">دسته‌بندی‌ها</h5>
+      <ul class="footer-links">
+        {% for cat in top_categories %}
+          <li>
+            <a href="{% url 'products:product_list' %}?category={{ cat.slug }}">
+              {{ cat.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- ستون ۴: تماس -->
+    <div class="footer-col">
+      <h5 class="footer-title">تماس با ما</h5>
+      <p class="footer-text">آدرس: کردستان کامیاران خیابان بهشتی پاساژ تجارت طبقه اول</p>
+      <p class="footer-text">تلفن:09189706048</p>
+    </div>
+
+  </div>
+
+  <!-- کپی‌رایت -->
+  <div class="footer-bottom">
+    <p>© 2025 ZHIRO - تمامی حقوق محفوظ است.</p>
+  </div>
+</footer>
+
+
+</div><!-- پایان کانتینر -->
+
+<script>
+  // اسکریپت Toast
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".toast").forEach(function(toast){
+      setTimeout(() => toast.classList.add("show"), 200);
+      setTimeout(() => toast.remove(), 4000);
+    });
+    document.querySelectorAll(".toast-close").forEach(btn=>{
+      btn.addEventListener("click", e => e.target.closest(".toast").remove());
+    });
+  });
+
+  // اسکریپت دسته‌بندی موبایل
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-target]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetId = btn.getAttribute('data-target');
+        const panel = document.querySelector(targetId);
+        if (panel) panel.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.mobile-categories .close-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const panel = btn.closest('.mobile-categories');
+        if (panel) panel.classList.remove('show');
+      });
+    });
+  });
+
+
+  // Mega Menu Switch
+
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+const panels = document.querySelectorAll('.mega-panel');
+
+sidebarItems.forEach(item => {
+
+    item.addEventListener('mouseenter', function(){
+
+        const categoryId = this.dataset.category;
+
+        sidebarItems.forEach(i=>{
+            i.classList.remove('active');
+        });
+
+        panels.forEach(panel=>{
+            panel.classList.remove('active');
+        });
+
+        this.classList.add('active');
+
+        const targetPanel = document.getElementById(
+            `panel-${categoryId}`
+        );
+
+        if(targetPanel){
+            targetPanel.classList.add('active');
+        }
+
+    });
+
+});
+
+
+document.querySelectorAll(".toggle-btn").forEach(btn=>{
+
+    btn.addEventListener("click",function(){
+
+        let target =
+        this.parentElement.nextElementSibling;
+
+        if(target){
+            target.classList.toggle("show");
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

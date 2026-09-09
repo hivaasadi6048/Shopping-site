@@ -1,0 +1,127 @@
+/* نوار پایین موبایل */
+/* پیش‌فرض: در دسکتاپ مخفی */
+.mobile-nav {
+  display: none;
+}
+
+/* فقط در موبایل نمایش داده شود */
+@media (max-width: 900px) {
+  .mobile-nav {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    z-index: 999;
+  }
+
+  /* اگر محتوای صفحه پشت نوار می‌رود، کمی فاصله بده */
+  .main-container {
+    padding-bottom: 64px; /* بسته به ارتفاع نوار موبایل */
+  }
+}
+
+/* در دسکتاپ همیشه مخفی بماند */
+@media (min-width: 901px) {
+  .mobile-nav {
+    display: none !important;
+  }
+}
+
+.mobile-inner {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.mobile-item {
+  flex: 1;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1rem;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-item .icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+
+.mobile-item .badge {
+  position: absolute;
+  top: -6px;
+  right: 18px;
+  background: #d00 !important;
+  color: #fff !important;
+  font-size: 11px !important; 
+  font-weight: 700;
+  padding: 2px 2px; 
+  border-radius: 50%;
+  display: inline-block;
+  min-width: 17px;
+  text-align: center;
+  line-height: 1.2; 
+}
+
+
+/* دسته‌بندی موبایل */
+.mobile-categories {
+  display: none; /* پیش‌فرض مخفی */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #eee;
+  max-height: 70%;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* وقتی کلاس show اضافه شود، فقط در موبایل نمایش داده شود */
+@media (max-width: 900px) {
+  .mobile-categories.show {
+    display: block;
+  }
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.mobile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-body {
+  padding: 10px;
+}
+
+.mobile-body .parent {
+  font-weight: 700;
+}
+
+.mobile-body .child {
+  margin-right: 10px;
+}
+
+.mobile-body .subchild {
+  margin-right: 20px;
+  font-size: 1rem;
+  color: #777;
+}

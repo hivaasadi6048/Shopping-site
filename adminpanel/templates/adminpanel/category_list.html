@@ -1,0 +1,124 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}لیست دسته‌بندی‌ها{% endblock %}
+
+{% block content %}
+<div class="category-container">
+
+  <div class="category-header">
+    <h2>📂 مدیریت دسته‌بندی‌ها</h2>
+    <a href="{% url 'adminpanel:category_add' %}" class="btn-primary">
+      ➕ افزودن دسته جدید
+    </a>
+  </div>
+
+  {% csrf_token %}
+
+  <div class="category-tree nested-sortable">
+    {% for category in tree %}
+        {% include "adminpanel/partials/category_node.html" with node=category level=0 %}
+    {% empty %}
+        <p>دسته‌ای وجود ندارد.</p>
+    {% endfor %}
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  // -------------------
+  // Toggle (Collapse)
+  // -------------------
+  document.querySelectorAll(".toggle-btn").forEach(btn=>{
+    btn.addEventListener("click", function(){
+
+      const container = this.closest(".tree-node")
+                           .querySelector(":scope > .children-container");
+
+      if (!container) return;
+
+      container.classList.toggle("hidden");
+      this.classList.toggle("open");
+
+    });
+  });
+
+  // -------------------
+  // Build JSON Tree
+  // -------------------
+  function buildTreeData(container){
+    let data = [];
+
+    container.querySelectorAll(':scope > .tree-node').forEach((node, index) => {
+
+      let item = {
+        id: node.dataset.id,
+        order: index,
+        children: []
+      };
+
+      let childContainer = node.querySelector(':scope > .children-container');
+
+      if(childContainer){
+        item.children = buildTreeData(childContainer);
+      }
+
+      data.push(item);
+    });
+
+    return data;
+  }
+
+  // -------------------
+  // Sortable
+  // -------------------
+  function initSortable(el){
+    new Sortable(el, {
+      group: 'nested',
+      animation: 150,
+      fallbackOnBody: true,
+      swapThreshold: 0.65,
+      draggable: ".tree-node",
+      onEnd: function () {
+        const treeData = buildTreeData(document.querySelector('.category-tree'));
+        fetch("{% url 'adminpanel:save_category_tree' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken()
+          },
+          body: JSON.stringify(treeData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          console.log("Tree saved successfully");
+        } else {
+          console.error("Error:", data.error);
+          alert("خطا در ذخیره ساختار");
+        }
+    })
+    .catch(error => {
+      console.error("Request failed:", error);
+    });
+
+      }
+    });
+  }
+
+  document.querySelectorAll('.nested-sortable').forEach(el=>{
+    initSortable(el);
+  });
+
+});
+
+function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends '_base.html' %}
+{% load i18n %}
+
+{% block page_titel %}signup{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <h1>{% trans 'ثبت‌نام در سایت' %}</h1>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <!-- فیلد شماره موبایل -->
+      <div class="form-group">
+        <label for="id_phone_number">شماره موبایل</label>
+        <input type="text" name="phone_number" id="id_phone_number"
+               value="{{ form.phone_number.value|default_if_none:'' }}"
+               class="form-control">
+
+        {% if form.phone_number.errors %}
+          <div class="error">{{ form.phone_number.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+
+      <!-- فیلد رمز عبور -->
+      <div class="form-group">
+        <label for="id_password1">رمز عبور</label>
+        <input type="password" name="password1" id="id_password1"
+               class="form-control">
+               
+        {% if form.password1.errors %}
+          <div class="error">{{ form.password1.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- فیلد تکرار رمز عبور -->
+      <div class="form-group">
+        <label for="id_password2">تکرار رمز عبور</label>
+        <input type="password" name="password2" id="id_password2"
+               class="form-control">
+        {% if form.password2.errors %}
+          <div class="error">{{ form.password2.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- دکمه ثبت‌نام -->
+      <input type="submit" value="ثبت‌نام" class="btn">
+
+      <!-- لینک پایین فرم -->
+      <p>
+        <a href="{% url 'account_login' %}">ورود</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}

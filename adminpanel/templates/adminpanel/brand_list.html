@@ -1,0 +1,72 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}لیست برندها{% endblock %}
+
+{% block content %}
+<div class="brands-page">
+
+    <div class="page-header">
+        <h2>مدیریت برندها</h2>
+        <a href="{% url 'adminpanel:brand_add' %}" class="btn btn-primary">
+            ➕ افزودن برند
+        </a>
+    </div>
+
+    {% if brands %}
+    <div class="table-wrapper">
+        <table class="brands-table">
+            <thead>
+                <tr>
+                    <th>نام</th>
+                    <th>لوگو</th>
+                    <th>توضیحات</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for brand in brands %}
+                <tr>
+                    <td class="brand-name">{{ brand.name }}</td>
+
+                    <td>
+                        {% if brand.logo %}
+                            <img src="{{ brand.logo.url }}" class="brand-logo">
+                        {% else %}
+                            <span class="no-image">بدون تصویر</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="brand-desc">
+                        {{ brand.description|truncatechars:60 }}
+                    </td>
+
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'adminpanel:brand_edit' brand.id %}" class="btn btn-edit">
+                                ویرایش
+                            </a>
+
+                            <form method="post"
+                                  action="{% url 'adminpanel:brand_delete' brand.id %}">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="btn btn-delete"
+                                        onclick="return confirm('حذف شود؟')">
+                                    حذف
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="empty-box">
+            هیچ برندی ثبت نشده است.
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

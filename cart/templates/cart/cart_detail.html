@@ -1,0 +1,72 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block title %}
+  {% trans 'cart' %}
+{% endblock %}
+
+{% block content %}
+<div class="cart-wrap">
+  <h1 class="cart-title">سبد خرید</h1>
+
+  {% if not cart.is_empty %}
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>حذف</th>
+          <th>عکس محصول</th>
+          <th>نام محصول</th>
+          <th>قیمت</th>
+          <th>تعداد</th>
+          <th>مجموع</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items %}
+        <tr>
+          <td data-label="حذف">
+            <a href="{% url 'cart:cart_remove' item.product_obj.id %}" class="remove-link">×</a>
+          </td>
+          <td data-label="عکس محصول">
+            <img src="{{ item.product_obj.image.url }}" class="cart-img">
+          </td>
+          <td data-label="نام محصول">
+            <a href="{{ item.product_obj.get_absolute_url }}" class="product-link">{{ item.product_obj.title }}</a>
+          </td>
+          <td data-label="قیمت">{{ item.product_obj.price|intcomma:False }}</td>
+          <td data-label="تعداد">
+            <form method="POST" action="{% url 'cart:cart_add' item.product_obj.id %}" class="qty-form">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="qty-input">
+              <input type="hidden" name="inplace" value="True">
+              <button type="submit" class="btn-update">{% trans 'update' %}</button>
+            </form>
+          </td>
+          <td data-label="مجموع">{{ item.total_price|intcomma:False }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="cart-actions">
+      <form method="POST" action="{% url 'cart:cart_clear' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-clear">خالی کردن سبد خرید</button>
+      </form>
+    </div>
+
+    <div class="cart-total">
+      <p>جمع کل: <strong>{{ cart.get_total_price|intcomma:False }} تومان</strong></p>
+    </div>
+
+    <a href="{% url 'orders:order_create' %}" class="btn-checkout">ثبت سفارش</a>
+
+  {% else %}
+    <p class="cart-empty">{% trans "Cart is Empty! Please add some products to the cart" %}</p>
+    <a href="{% url 'products:product_list' %}" class="btn-back">{% trans 'Go to Shoping' %}</a>
+  {% endif %}
+</div>
+{% endblock %}

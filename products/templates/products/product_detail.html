@@ -1,0 +1,448 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% load jalali_tags %}
+{% load comment_tags %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="product-detail">
+
+    <!-- گالری تصاویر -->
+    <div class="detail-card">
+
+        <div class="detail-image-wrap">
+            <div class="detail-image-main">
+
+                <button class="gallery-arrow gallery-prev" onclick="prevImage()">
+                ❯
+                </button>
+
+                <div class="detail-image-main">
+
+                    {% if product.image %}
+                        <img
+                            id="mainProductImage"
+                            src="{{ product.image.url }}"
+                            alt="{{ product.title }}"
+                            onclick="openLightbox()"
+                        >
+                    {% else %}
+                        <img
+                            id="mainProductImage"
+                            src="{% static 'img/no-image.png' %}"
+                            alt="no image"
+                        >
+                    {% endif %}
+
+                </div>
+
+            
+
+                <button class="gallery-arrow gallery-next" onclick="nextImage()">
+                ❮
+                </button>
+
+            </div>
+
+            <div class="detail-thumbs">
+
+                {% if product.image %}
+                <div class="detail-thumb active">
+                    <img
+                        src="{{ product.image.url }}"
+                        onclick="changeImage(this)">
+                </div>
+                {% endif %}
+
+                {% for img in product.images.all %}
+                <div class="detail-thumb">
+                    <img
+                        src="{{ img.image.url }}"
+                        onclick="changeImage(this)">
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- اطلاعات محصول -->
+    <div class="detail-card">
+
+        <h1 class="detail-title">
+            {{ product.title }}
+        </h1>
+
+        {% if product.short_description %}
+        <div class="detail-subtitle">
+            {{ product.short_description }}
+        </div>
+        {% endif %}
+
+        <div class="detail-specs">
+
+            {% if product.brand %}
+            <div class="spec-item">
+                <span class="spec-key">برند:</span>
+                <span>
+                    {% if product.brand and product.brand.slug %}
+                        <a href="{% url 'products:brand_products' product.brand.slug %}">
+                            {{ product.brand }}
+                        </a>
+                    {% else %}
+                        {{ product.brand }}
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+
+            {% if product.category %}
+            <div class="spec-item">
+                <span class="spec-key">دسته بندی:</span>
+                <span>
+                    {% if product.category and product.category.slug %}
+                        <a href="{% url 'products:category_products' product.category.slug %}">
+                            {{ product.category }}
+                        </a>
+                    {% else %}
+                        {{ product.category }}
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+
+            {% if product.size %}
+            <div class="spec-item">
+                <span class="spec-key">سایز:</span>
+                <span>{{ product.size }}</span>
+            </div>
+            {% endif %}
+
+            <div class="spec-item">
+                
+
+                <span class="stock-pill">
+                    <span class="spec-key">موجودی:</span>
+                    {% if product.stock > 0 %}
+                        {{ product.stock }}
+                    {% else %}
+                         ناموجود
+                    {% endif %}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="product-content">
+
+    <!-- ستون اصلی -->
+    <div class="product-main">
+
+        <div class="detail-card">
+
+            <h2>توضیحات محصول</h2>
+
+            <div class="detail-description">
+                {{ product.description|safe }}
+            </div>
+
+        </div>
+
+
+        <div class="comments-card">
+
+            <h2>دیدگاه کاربران</h2>
+
+            {% with product.comments.all as comments %}
+                {% if comments %}
+
+                    {% for coment in comments|only_active_comments %}
+                        {% if coment.active %}
+
+                        <div class="comment-item">
+
+                            <div class="comment-head">
+
+                                <strong>
+                                    {{ coment.author.username }}
+                                </strong>
+
+                                <span class="small">
+
+                                    امتیاز:
+                                    {{ coment.get_stars_display }}
+
+                                    —
+
+                                    {{ coment.datetime_created|to_jalali:'%y/%m/%d _ %H:%M:%S' }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="comment-body">
+                                {{ coment.body|safe }}
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+                    {% endfor %}
+
+                {% else %}
+
+                    <p class="muted">
+                        هنوز دیدگاهی ثبت نشده است.
+                    </p>
+
+                {% endif %}
+            {% endwith %}
+
+
+            {% if user.is_authenticated %}
+
+            <form
+                action="{% url 'products:comment_create' product.id %}"
+                method="post"
+                class="form-row"
+            >
+
+                {% csrf_token %}
+
+                {{ comment_form.media }}
+
+                {{ comment_form }}
+
+                <div class="form-actions">
+
+                    <input
+                        type="submit"
+                        value="ارسال دیدگاه"
+                        class="btn btn-secondary"
+                    >
+
+                </div>
+
+            </form>
+
+            {% else %}
+
+            <p>
+
+                برای ثبت دیدگاه وارد حساب کاربری خود شوید.
+
+                <a
+                    href="{% url 'account_login' %}"
+                    class="clean-link"
+                >
+                    ورود
+                </a>
+
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- سایدبار -->
+<div class="product-sidebar">
+
+    <div class="sticky-box">
+
+        <div class="mobile-buy-box">
+
+            <div class="mobile-price-side">
+
+                <div class="detail-price">
+                    {{ product.price|intcomma:False }} تومان
+                </div>
+
+                <span class="stock-pill">
+                    {% if product.stock > 0 %}
+                        موجودی: {{ product.stock }}
+                    {% else %}
+                        ناموجود
+                    {% endif %}
+                </span>
+
+            </div>
+
+            <form
+                action="{% url 'cart:cart_add' product.id %}"
+                method="post"
+                class="mobile-cart-form"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    class="input-qty"
+                    type="number"
+                    value="1"
+                    min="1"
+                    name="quantity"
+                >
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    افزودن به سبد خرید
+                </button>
+
+            </form>
+
+        </div>
+
+        <hr>
+
+        <div class="mini-specs">
+
+            {% if product.category %}
+            <div>
+                دسته:
+                {{ product.category }}
+            </div>
+            {% endif %}
+
+            {% if product.brand %}
+            <div>
+                برند:
+                {{ product.brand }}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="lightbox" class="lightbox">
+
+    <span
+        class="lightbox-close"
+        onclick="closeLightbox()"
+    >
+        ✕
+    </span>
+
+    <button
+        class="lightbox-prev"
+        onclick="prevImage()"
+    >
+        ❯
+    </button>
+
+    <img id="lightboxImage">
+
+    <button
+        class="lightbox-next"
+        onclick="nextImage()"
+    >
+       ❮
+    </button>
+
+</div>
+
+
+
+
+
+<script>
+
+let currentIndex = 0;
+
+const thumbs =
+    document.querySelectorAll(".detail-thumb img");
+
+function changeImage(el){
+
+    document.getElementById(
+        "mainProductImage"
+    ).src = el.src;
+
+    document.getElementById(
+        "lightboxImage"
+    ).src = el.src;
+
+    document
+        .querySelectorAll(".detail-thumb")
+        .forEach(item =>
+            item.classList.remove("active")
+        );
+
+    el.parentElement.classList.add("active");
+
+    currentIndex =
+        [...thumbs].indexOf(el);
+}
+
+function nextImage(){
+
+    currentIndex++;
+
+    if(currentIndex >= thumbs.length){
+        currentIndex = 0;
+    }
+
+    changeImage(
+        thumbs[currentIndex]
+    );
+}
+
+function prevImage(){
+
+    currentIndex--;
+
+    if(currentIndex < 0){
+        currentIndex =
+            thumbs.length - 1;
+    }
+
+    changeImage(
+        thumbs[currentIndex]
+    );
+}
+
+function openLightbox(){
+
+    document
+        .getElementById("lightbox")
+        .classList.add("show");
+
+    document
+        .getElementById("lightboxImage")
+        .src =
+        document.getElementById(
+            "mainProductImage"
+        ).src;
+}
+
+function closeLightbox(){
+
+    document
+        .getElementById("lightbox")
+        .classList.remove("show");
+}
+
+</script>
+
+{% endblock %}

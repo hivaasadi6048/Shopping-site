@@ -1,0 +1,35 @@
+{% extends "adminpanel/_admin_base.html" %}
+{% block title %}
+{% if comment %}ویرایش کامنت{% else %}افزودن کامنت{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="comment-form-page">
+
+    <div class="form-card">
+        <h2>
+            {% if comment %}
+                ویرایش کامنت برای "{{ comment.product.title }}"
+            {% else %}
+                افزودن کامنت جدید
+            {% endif %}
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <a href="{% url 'adminpanel:comment_list' %}" class="btn btn-secondary">
+                    بازگشت
+                </a>
+
+                <button type="submit" class="btn btn-success">
+                    {% if comment %}ذخیره تغییرات{% else %}ثبت کامنت{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
