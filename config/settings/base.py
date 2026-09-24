@@ -3,6 +3,7 @@ from pathlib import Path
 from environs import Env
 import os
 from datetime import timedelta
+import django_cache_url
 
 env = Env()
 env.read_env()
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sitemaps',
 
     # Third-party
     'jalali_date',
@@ -158,6 +160,7 @@ LOGIN_URL = 'account_login'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignupForm',
+    'login': 'accounts.forms.CustomAuthenticationForm',
 }
 
 
@@ -172,20 +175,28 @@ ACCOUNT_LOGIN_METHODS = {'username'}
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# --- Axes ---
+# --- Axes (محافظت در برابر حدس رمز) ---
 AXES_ENABLED = True
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = timedelta(minutes=5)
-AXES_ONLY_USER_FAILURES = True
 AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
-AXES_META_PRECEDENCE_ORDER = ['HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
-AXES_USERNAME_FORM_FIELD = 'username'
+# هر دو فرم ورود (allauth با فیلد login و ادمین با فیلد username) پشتیبانی می‌شود
+AXES_USERNAME_CALLABLE = 'accounts.backends.get_client_username'
 AXES_DISALLOW_SUPERUSER = False
 AXES_ONLY_SUPERUSER_FAILURES = False
 AXES_CACHE = 'default'
 AXES_LOCKOUT_TEMPLATE = 'registration/account_locked.html'
-AXES_USE_USER_AGENT = True
 AXES_VERBOSE = True
+
+# --- Cache ---
+# پیش‌فرض حافظه محلی؛ در پروداکشن چند‌ورکری CACHE_URL=redis://... را در .env بگذار
+# تا شمارش تلاش‌های ناموفق بین ورکرها مشترک باشد
+CACHES = {
+    'default': django_cache_url.config(default='locmem://'),
+}
+
+# W001 عمداً ساکت شده: نام‌کاربری از شماره موبایل ساخته می‌شود (CustomSignupForm)
+SILENCED_SYSTEM_CHECKS = ['account.W001']
 
 # --- Sessions ---
 SESSION_COOKIE_AGE = 1200 #ثانیه

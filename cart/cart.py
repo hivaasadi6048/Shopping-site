@@ -81,6 +81,7 @@ class Cart:
         """
         if self.user and self.user.is_authenticated:
             CartItem.objects.filter(user=self.user).delete()
+        self.cart = {}
         self.session["cart"] = {}
         self.save()
 

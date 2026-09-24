@@ -31,7 +31,7 @@ body.dark .spec-form-card {
   margin-bottom: 24px;
   font-size: 22px;
   font-weight: 800;
-  color: var(--blue);
+  color: var(--primary);
 }
 
 /* =====================
@@ -75,16 +75,47 @@ body.dark .form-group select {
 }
 
 /* =====================
-   Actions
+    Actions
 ===================== */
 .form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-block;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
 }
 
 /* =====================
-   Mobile
+    Mobile
 ===================== */
 @media (max-width: 600px) {
   .spec-form-card {

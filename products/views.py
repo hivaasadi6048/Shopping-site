@@ -8,6 +8,8 @@ from django.utils import timezone
 from django.contrib import messages
 from django.views.generic import ListView
 from django.db.models import Min, Max
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 
 
 class ProductListView(generic.ListView):
@@ -69,8 +71,8 @@ class ProductListView(generic.ListView):
         elif sort == "expensive":
             queryset = queryset.order_by("-price")
         elif sort == "popular":
-            # بدون تغییر مدل: بر اساس برچسب پرفروش + تاریخ
-            queryset = queryset.order_by("-is_best_seller", "-datetime_created")
+            # بر اساس آمار فروش واقعی
+            queryset = queryset.order_by("-sales_count", "-datetime_created")
 
         elif sort == "new": queryset = queryset.order_by("-datetime_created")
         
@@ -93,6 +95,11 @@ class ProductListView(generic.ListView):
         context['query'] = request.GET.get('q', '')
         context['sort'] = request.GET.get('sort', '')
         context['brands'] = Brand.objects.all().order_by('name')
+
+        # querystring بدون page برای حفظ فیلترها در لینک‌های صفحه‌بندی
+        querydict = request.GET.copy()
+        querydict.pop('page', None)
+        context['querystring'] = querydict.urlencode()
 
         # برای بردکرامب
         category_slug = request.GET.get('category')
@@ -130,11 +137,22 @@ class ProductDetailView(generic.DetailView):
 
 
 
+@method_decorator(ratelimit(key='user', rate='10/m', block=False), name='post')
 class CommentCreateView(LoginRequiredMixin, generic.CreateView):
     model = Comment
     form_class = CommentForm
 
     def form_valid(self, form):
+
+        # محدودیت نرخ ارسال
+        if getattr(self.request, 'limited', False):
+            messages.error(
+                self.request,
+                "تعداد ارسال دیدگاه زیاد است. لطفاً چند دقیقه بعد تلاش کنید."
+            )
+            product_id = int(self.kwargs['product_id'])
+            product = get_object_or_404(Product, id=product_id)
+            return redirect(product.get_absolute_url())
 
         # دریافت محصول
         product_id = int(self.kwargs['product_id'])
@@ -160,10 +178,15 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
                 # بازگشت امن به صفحه محصول
                 return redirect(product.get_absolute_url())
 
-        # ذخیره کامنت
+        # ذخیره کامنت (منتشر شدن پس از تأیید ادمین)
         form.instance.author = self.request.user
         form.instance.product = product
+        form.instance.active = False
 
+        messages.success(
+            self.request,
+            "دیدگاه شما ثبت شد و پس از تأیید نمایش داده می‌شود."
+        )
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -177,6 +200,7 @@ class CategoryProductsView(ListView):
     model = Product
     template_name = "products/product_list.html"
     context_object_name = "products"
+    paginate_by = 20
 
     def get_queryset(self):
         return Product.objects.filter(
@@ -184,14 +208,37 @@ class CategoryProductsView(ListView):
             category__slug=self.kwargs["slug"]
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        querydict = self.request.GET.copy()
+        querydict.pop('page', None)
+        context['querystring'] = querydict.urlencode()
+        context['brands'] = Brand.objects.all().order_by('name')
+        price_range = Product.objects.filter(active=True).aggregate(min_price=Min('price'), max_price=Max('price'))
+        context['min_price'] = price_range['min_price'] or 0
+        context['max_price'] = price_range['max_price'] or 0
+        return context
+
 
 class BrandProductsView(ListView):
     model = Product
     template_name = "products/product_list.html"
     context_object_name = "products"
+    paginate_by = 20
 
     def get_queryset(self):
         return Product.objects.filter(
             active=True,
             brand__slug=self.kwargs["slug"]
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        querydict = self.request.GET.copy()
+        querydict.pop('page', None)
+        context['querystring'] = querydict.urlencode()
+        context['brands'] = Brand.objects.all().order_by('name')
+        price_range = Product.objects.filter(active=True).aggregate(min_price=Min('price'), max_price=Max('price'))
+        context['min_price'] = price_range['min_price'] or 0
+        context['max_price'] = price_range['max_price'] or 0
+        return context

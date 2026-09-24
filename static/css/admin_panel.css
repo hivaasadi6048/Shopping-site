@@ -2,9 +2,10 @@
    Design System
 ===================== */
 :root {
-  --blue: #0066b2;
-  --blue-dark: #004c91;
-  --green: #00b386;
+  --primary: #659287;
+  --primary-dark: #54786d;
+  --primary-light: #e8f0ee;
+  --primary-hover: #4a655a;
 
   --bg: #f4f6f8;
   --bg-dark: #121212;
@@ -53,7 +54,7 @@ body.dark {
   inset: 0 0 0 auto;
   width: 260px;
   padding: 24px 20px;
-  background: linear-gradient(180deg, #0f3d66, #0b2f4d);
+  background: linear-gradient(180deg, #3d6b5c, #2d4f44);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -87,36 +88,47 @@ body.dark {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.menu a.active {
-  background: #fff;
-  color: var(--blue-dark);
-  font-weight: 600;
+.menu a.site-link {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ddd;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 10px;
+    border: 1px dashed rgba(255,255,255,0.2);
 }
 
-/* =====================
-   Sidebar Bottom
-===================== */
+.menu a.site-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255,255,255,0.4);
+}
+
+.menu a.active {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+}
+
 .sidebar__bottom {
-  text-align: center;
+    text-align: center;
 }
 
 .dark-toggle {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: var(--radius);
-  cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
 }
 
 .logout {
-  display: block;
-  margin-top: 14px;
-  background: linear-gradient(135deg, var(--green), #009970);
-  color: #fff;
-  padding: 10px;
-  border-radius: var(--radius);
-  text-decoration: none;
+    display: block;
+    margin-top: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    padding: 10px;
+    border-radius: var(--radius);
+    text-decoration: none;
 }
 
 /* =====================
@@ -130,10 +142,17 @@ body.dark {
 }
 
 @media (max-width: 992px) {
-  .main {
-    margin-right: 0 !important;
-    width: 100%;
-  }
+    .main {
+        margin-right: 0 !important;
+        width: 100%;
+    }
+}
+
+/* Padding to prevent fixed bottom button from hiding content on mobile */
+@media (max-width: 768px) {
+    .main {
+        padding-bottom: 100px;
+    }
 }
 
 
@@ -145,9 +164,9 @@ body.dark {
 }
 
 .dashboard-header h1 {
-  margin: 0 0 6px;
-  font-size: 28px;
-  color: var(--blue);
+    margin: 0 0 6px;
+    font-size: 28px;
+    color: var(--primary);
 }
 
 .dashboard-header p {
@@ -158,38 +177,45 @@ body.dark {
    Stat Cards
 ===================== */
 .dashboard-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+   gap: 24px;
+   margin-bottom: 40px;
 }
 
 .card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-  transition: transform var(--transition), box-shadow var(--transition);
+   background: var(--card-bg);
+   border-radius: 16px;
+   padding: 28px;
+   box-shadow: 0 4px 12px rgba(101, 146, 135, 0.08);
+   border: 1px solid rgba(101, 146, 135, 0.1);
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+   font-family: 'Vazirmatn', 'Shabnam', sans-serif;
 }
 
 body.dark .card {
-  background: var(--card-bg-dark);
+   background: var(--card-bg-dark);
+   border-color: rgba(101, 146, 135, 0.2);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+   transform: translateY(-6px);
+   box-shadow: 0 20px 40px rgba(101, 146, 135, 0.15);
 }
 
 .card__title {
-  font-size: 14px;
-  opacity: 0.7;
+   font-size: 14px;
+   opacity: 0.7;
+   font-family: 'Vazirmatn', 'Shabnam', sans-serif;
+   font-weight: 600;
 }
 
 .card__value {
-  margin-top: 10px;
-  font-size: 30px;
-  font-weight: 700;
+   margin-top: 10px;
+   font-size: 30px;
+   font-weight: 800;
+   color: var(--primary);
+   font-family: 'Vazirmatn', 'Shabnam', sans-serif;
 }
 
 /* =====================
@@ -205,46 +231,67 @@ body.dark .card {
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 32px;
+  padding: 28px;
   background: var(--card-bg);
-  border-radius: var(--radius);
+  border-radius: 16px;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 12px rgba(101, 146, 135, 0.08);
+  border: 1px solid rgba(101, 146, 135, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Vazirmatn', 'Shabnam', sans-serif;
 }
 
 body.dark .dash-card {
   background: var(--card-bg-dark);
+  border-color: rgba(101, 146, 135, 0.2);
 }
 
 .dash-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(101, 146, 135, 0.15);
 }
 
 .dash-card__icon {
-  width: 56px;
-  height: 56px;
-  background: rgba(0, 102, 178, 0.12);
-  color: var(--blue);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    background: rgba(101, 146, 135, 0.12);
+    color: var(--primary);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
 }
 
 .dash-card__content h3 {
   margin: 0 0 4px;
   font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Vazirmatn', 'Shabnam', sans-serif;
 }
 
 .dash-card__content p {
   margin: 0;
   font-size: 14px;
   opacity: 0.7;
+  font-family: 'Vazirmatn', 'Shabnam', sans-serif;
+}
+
+/* =====================
+   Form Cards
+===================== */
+.form-card, .product-form-card, .image-form-card, .spec-form-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(101, 146, 135, 0.08);
+  border: 1px solid rgba(101, 146, 135, 0.1);
+  font-family: 'Vazirmatn', 'Shabnam', sans-serif;
+}
+
+body.dark .form-card, body.dark .product-form-card, body.dark .image-form-card, body.dark .spec-form-card {
+  border-color: rgba(101, 146, 135, 0.2);
 }
 
 /* =====================
@@ -266,7 +313,7 @@ body.dark .dash-card {
 
     z-index: 3000; /* مهم‌ترین خط */
 
-    background: var(--blue);
+    background: var(--primary);
     color: #fff;
     border: none;
     padding: 10px 14px;

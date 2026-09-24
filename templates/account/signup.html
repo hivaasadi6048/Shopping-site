@@ -1,7 +1,7 @@
 {% extends '_base.html' %}
 {% load i18n %}
 
-{% block page_titel %}signup{% endblock %}
+{% block title %}ثبت‌نام | ZHIRO{% endblock %}
 
 {% block content %}
   <div class="auth-wrapper">
@@ -19,6 +19,19 @@
 
         {% if form.phone_number.errors %}
           <div class="error">{{ form.phone_number.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+
+      <!-- فیلد ایمیل (اختیاری) -->
+      <div class="form-group">
+        <label for="id_email">ایمیل (اختیاری - برای دریافت فاکتور)</label>
+        <input type="email" name="email" id="id_email"
+               value="{{ form.email.value|default_if_none:'' }}"
+               class="form-control" dir="ltr">
+
+        {% if form.email.errors %}
+          <div class="error">{{ form.email.errors.0 }}</div>
         {% endif %}
       </div>
 

@@ -32,6 +32,16 @@ ADMINS = [('Admin', 'admin@yourdomain.com')]
 SERVER_EMAIL = 'server@yourdomain.com'
 
 
+# وقتی پشت Nginx/پراکسی با SSL هستی، این هدر لازم است تا جنگو بفهمد
+# درخواست اصلی https بوده (وگرنه callback زرین‌پال با http ساخته می‌شود
+# و کوکی‌های Secure فرستاده نمی‌شوند). در Nginx باید این را بگذاری:
+# proxy_set_header X-Forwarded-Proto $scheme;
+# proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# دامنه‌های مجاز برای POST با CSRF (بدون این، فرم‌ها پشت https خطای 403 می‌دهند)
+CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", [])
+
 # تنظیمات امنیتی
 SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True

@@ -1,24 +1,20 @@
 # adminpanel/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from django.http import HttpResponseForbidden
-from products.models import Product, Comment
-from orders.models import Order
-from .forms import ProductForm, OrderUpdateForm, CommentForm, OrderStatusForm, OrderItemFormSet
-from .decorators import staff_or_superuser_required, staff_required, superuser_required
-from .utils import create_audit_log
-from products.models import Brand, Category, ProductImage, ProductSpecification
-from .forms import BrandForm, CategoryForm, ProductImageForm, ProductSpecificationForm
+from django.http import HttpResponseForbidden, JsonResponse
 from django.db import transaction
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.contrib import messages
-from orders.utils import generate_invoice_screenshot
 from django.core.paginator import Paginator
-import json
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.db import transaction
+from products.models import Product, Comment
+from products.models import Brand, Category, ProductImage, ProductSpecification
+from orders.models import Order
+from orders.utils import generate_invoice_screenshot
+from .forms import ProductForm, OrderUpdateForm, CommentForm, OrderStatusForm, OrderItemFormSet
+from .forms import BrandForm, CategoryForm, ProductImageForm, ProductSpecificationForm
+from .decorators import staff_or_superuser_required, staff_required, superuser_required
+from .utils import create_audit_log
 
 
 

@@ -28,7 +28,10 @@
         {% for item in cart.items %}
         <tr>
           <td data-label="حذف">
-            <a href="{% url 'cart:cart_remove' item.product_obj.id %}" class="remove-link">×</a>
+            <form method="POST" action="{% url 'cart:cart_remove' item.product_obj.id %}" style="display:inline">
+              {% csrf_token %}
+              <button type="submit" class="remove-link">×</button>
+            </form>
           </td>
           <td data-label="عکس محصول">
             <img src="{{ item.product_obj.image.url }}" class="cart-img">
@@ -42,7 +45,7 @@
               {% csrf_token %}
               <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="qty-input">
               <input type="hidden" name="inplace" value="True">
-              <button type="submit" class="btn-update">{% trans 'update' %}</button>
+              <button type="submit" class="btn-update">به‌روزرسانی</button>
             </form>
           </td>
           <td data-label="مجموع">{{ item.total_price|intcomma:False }}</td>
@@ -65,8 +68,8 @@
     <a href="{% url 'orders:order_create' %}" class="btn-checkout">ثبت سفارش</a>
 
   {% else %}
-    <p class="cart-empty">{% trans "Cart is Empty! Please add some products to the cart" %}</p>
-    <a href="{% url 'products:product_list' %}" class="btn-back">{% trans 'Go to Shoping' %}</a>
+    <p class="cart-empty">سبد خرید شما خالی است! لطفاً چند محصول به سبد اضافه کنید.</p>
+    <a href="{% url 'products:product_list' %}" class="btn-back">رفتن به فروشگاه</a>
   {% endif %}
 </div>
 {% endblock %}

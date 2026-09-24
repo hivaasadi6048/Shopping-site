@@ -9,10 +9,21 @@ User = get_user_model()
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email','phone_number',]
+        fields = ['first_name', 'last_name', 'email', 'phone_number']
+        labels = {
+            'first_name': 'نام',
+            'last_name': 'نام خانوادگی',
+            'email': 'ایمیل',
+            'phone_number': 'شماره موبایل',
+        }
 
 # فرم تغییر رمز عبور
 class CustomPasswordChangeForm(PasswordChangeForm):
+    error_messages = {
+        'password_incorrect': 'رمز عبور فعلی اشتباه است.',
+        'password_too_short': 'رمز عبور باید حداقل ۸ کاراکتر باشد.',
+        'password_mismatch': 'رمزهای عبور همخوانی ندارند.',
+    }
     old_password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'رمز فعلی'}),
         label='رمز فعلی'

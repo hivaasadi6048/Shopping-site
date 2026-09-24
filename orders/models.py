@@ -7,39 +7,39 @@ from django.utils.translation import gettext_lazy as _
 
 class Order(models.Model):
     STATUS_CHOICES = (
-        ('pending', _('Pending')),
-        ('processing', _('Processing')),
-        ('paid', _('Paid')),
-        ('shipped', _('Shipped')),
-        ('cancelled', _('Cancelled')),
+        ('pending', _('در انتظار')),
+        ('processing', _('در حال پردازش')),
+        ('paid', _('پرداخت‌شده')),
+        ('shipped', _('ارسال‌شده')),
+        ('cancelled', _('لغو‌شده')),
     )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        verbose_name=_('User')
+        verbose_name=_('کاربر')
     )
-    first_name = models.CharField(max_length=100, verbose_name=_('First Name'))
-    last_name = models.CharField(max_length=100, verbose_name=_('Last Name'))
-    phone_number = models.CharField(max_length=15, verbose_name=_('Phone Number'))
-    address = models.CharField(max_length=700, verbose_name=_('Address'))
-    order_notes = models.CharField(max_length=700, blank=True, verbose_name=_('Order Notes'))
-    is_paid = models.BooleanField(default=False, verbose_name=_('Is Paid'))
+    first_name = models.CharField(max_length=100, verbose_name=_('نام'))
+    last_name = models.CharField(max_length=100, verbose_name=_('نام خانوادگی'))
+    phone_number = models.CharField(max_length=15, verbose_name=_('شماره تلفن'))
+    address = models.CharField(max_length=700, verbose_name=_('آدرس'))
+    order_notes = models.CharField(max_length=700, blank=True, verbose_name=_('یادداشت سفارش'))
+    is_paid = models.BooleanField(default=False, verbose_name=_('پرداخت شده'))
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='pending',
-        verbose_name=_('Order Status')
+        verbose_name=_('وضعیت سفارش')
     )
-    zarinpal_authority = models.CharField(max_length=255, blank=True, verbose_name=_('Zarinpal Authority'))
-    zarinpal_ref_id = models.CharField(max_length=150, blank=True, verbose_name=_('Zarinpal Ref ID'))
-    zarinpal_data = models.TextField(blank=True, verbose_name=_('Zarinpal Data'))
-    datetime_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('Modified At'))
+    zarinpal_authority = models.CharField(max_length=255, blank=True, verbose_name=_('شماره مجوز زرین‌پال'))
+    zarinpal_ref_id = models.CharField(max_length=150, blank=True, verbose_name=_('شناسه مرجع زرین‌پال'))
+    zarinpal_data = models.TextField(blank=True, verbose_name=_('داده‌های زرین‌پال'))
+    datetime_created = models.DateTimeField(auto_now_add=True, verbose_name=_('تاریخ ایجاد'))
+    datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('تاریخ تغییر'))
 
     class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
+        verbose_name = _('سفارش')
+        verbose_name_plural = _('سفارش‌ها')
         ordering = ['-datetime_created']
 
     def __str__(self):

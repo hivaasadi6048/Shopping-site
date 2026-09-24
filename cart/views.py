@@ -1,9 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from urllib.parse import urlparse
 from .cart import Cart
 from products.models import Product
 from .forms import AddToCartProductForm
 from django.contrib import messages
+
+
+def safe_referer_redirect(request, default_name='cart:cart_detail'):
+    """ریدایرکت فقط به آدرس‌های داخلی (جلوگیری از Open Redirect)"""
+    referer = request.META.get("HTTP_REFERER")
+    if referer:
+        parsed = urlparse(referer)
+        if not parsed.netloc or parsed.netloc == request.get_host():
+            return redirect(referer)
+    return redirect(default_name)
 
 
 def cart_detail_view(request):
@@ -40,23 +51,17 @@ def add_to_cart_view(request, product_id):
     else:
         messages.error(request, 'اطلاعات فرم معتبر نیست.')
 
-    # ✅ برگشت به همان صفحه‌ای که کاربر بود
-    referer = request.META.get("HTTP_REFERER")
-    if referer:
-        return redirect(referer)
-    return redirect('cart:cart_detail')
+    # ✅ برگشت فقط به آدرس داخلی (جلوگیری از Open Redirect)
+    return safe_referer_redirect(request)
 
 
+@require_POST
 def remove_from_cart(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     messages.success(request, f'{product.title} از سبد خرید حذف شد.')
-
-    referer = request.META.get("HTTP_REFERER")
-    if referer:
-        return redirect(referer)
-    return redirect('cart:cart_detail')
+    return safe_referer_redirect(request)
 
 
 @require_POST
@@ -68,7 +73,4 @@ def clear_cart(request):
     else:
         messages.warning(request, 'سبد خرید شما خالی است.')
 
-    referer = request.META.get("HTTP_REFERER")
-    if referer:
-        return redirect(referer)
-    return redirect('cart:cart_detail')
+    return safe_referer_redirect(request)

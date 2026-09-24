@@ -20,13 +20,13 @@ body.dark .product-form-card {
 .product-form-title {
   margin-bottom: 28px;
   text-align: center;
-  color: var(--blue);
-  font-size: 24px;
-  font-weight: 800;
+color: var(--primary);
+    font-size: 24px;
+    font-weight: 800;
 }
 
 /* =====================
-   Grid
+    Grid
 ===================== */
 .form-grid {
   display: grid;
@@ -84,17 +84,17 @@ body.dark .form-group textarea {
 }
 
 .btn-primary {
-  background: var(--blue);
-  color: #fff;
-  padding: 12px 22px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
 }
 
 .btn-primary:hover {
-  background: var(--blue-dark);
+    background: var(--primary-dark);
 }
 
 .btn-secondary {
@@ -104,6 +104,12 @@ body.dark .form-group textarea {
   border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
+  border: 1px solid #d1d5db;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
 }
 
 body.dark .btn-secondary {

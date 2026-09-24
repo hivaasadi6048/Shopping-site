@@ -115,19 +115,21 @@ def generate_invoice_screenshot(order):
 
     c.save()
 
-    # ================= ارسال ایمیل =================
-    subject = f"فاکتور سفارش #{order.id}"
-    from_email = settings.DEFAULT_FROM_EMAIL
-    to = [order.user.email]
+    # ================= ارسال ایمیل (فقط اگر کاربر ایمیل داشته باشد) =================
+    user_email = getattr(order.user, "email", "")
+    if user_email:
+        subject = f"فاکتور سفارش #{order.id}"
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to = [user_email]
 
-    html_content = render_to_string(
-        "orders/invoice_email.html",
-        {"order": order}
-    )
+        html_content = render_to_string(
+            "orders/invoice_email.html",
+            {"order": order}
+        )
 
-    msg = EmailMultiAlternatives(subject, "", from_email, to)
-    msg.attach_alternative(html_content, "text/html")
-    msg.attach_file(pdf_path)
-    msg.send()
+        msg = EmailMultiAlternatives(subject, "", from_email, to)
+        msg.attach_alternative(html_content, "text/html")
+        msg.attach_file(pdf_path)
+        msg.send()
 
     return pdf_path

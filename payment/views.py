@@ -1,9 +1,11 @@
 import json
 import requests
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
+from django_ratelimit.decorators import ratelimit
 from django.db import transaction
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
@@ -36,13 +38,20 @@ def _env_urls_and_merchant():
         "verify": "https://payment.zarinpal.com/pg/v4/payment/verify.json",
     }
 
+@login_required
+@ratelimit(key='user', rate='20/h', block=False)
 def payment_process(request):
     """ارسال درخواست پرداخت به زرین‌پال"""
+    if getattr(request, 'limited', False):
+        messages.error(request, "تعداد درخواست پرداخت زیاد است. لطفاً چند دقیقه بعد تلاش کنید.")
+        return redirect('cart:cart_detail')
+
     order_id = request.session.get('order_id')
     if not order_id:
-        return HttpResponse("Order not found in session", status=400)
+        messages.error(request, "سفارشی برای پرداخت پیدا نشد. لطفاً دوباره سفارش ثبت کنید.")
+        return redirect('cart:cart_detail')
 
-    order = get_object_or_404(Order, id=order_id)
+    order = get_object_or_404(Order, id=order_id, user=request.user)
     rial_total_price = int(order.get_total_price() * 10)
 
     cfg = _env_urls_and_merchant()
@@ -75,7 +84,11 @@ def payment_process(request):
         return redirect(f"{startpay_url}{order.zarinpal_authority}")
 
     error = data.get("errors", {})
-    return HttpResponse(f"خطا در پرداخت → {error.get('code')} - {error.get('message')}", status=400)
+    messages.error(
+        request,
+        f"خطا در اتصال به درگاه پرداخت (کد {error.get('code')}). لطفاً دوباره تلاش کنید."
+    )
+    return render(request, "payment/payment_error.html", {"order": order}, status=400)
 
 
 
@@ -89,7 +102,8 @@ def payment_callback(request):
     status = request.GET.get("Status")
 
     if not authority or not status:
-        return HttpResponse("پارامترهای نامعتبر ❌", status=400)
+        messages.error(request, "پارامترهای پرداخت نامعتبر است.")
+        return render(request, "payment/payment_error.html", status=400)
 
     order = get_object_or_404(
         Order,
@@ -106,10 +120,8 @@ def payment_callback(request):
 
     # کاربر پرداخت را لغو کرده
     if status != "OK":
-        return HttpResponse(
-            "پرداخت توسط کاربر لغو شد ❌",
-            status=400
-        )
+        messages.warning(request, "پرداخت لغو شد. سفارش شما همچنان ثبت است.")
+        return redirect('pages:home')
 
     cfg = _env_urls_and_merchant()
 
@@ -136,10 +148,8 @@ def payment_callback(request):
         res.raise_for_status()
 
     except requests.RequestException:
-        return HttpResponse(
-            "خطا در ارتباط با زرین‌پال ❌",
-            status=500
-        )
+        messages.error(request, "خطا در ارتباط با درگاه پرداخت. لطفاً دوباره تلاش کنید.")
+        return render(request, "payment/payment_error.html", {"order": order}, status=500)
 
     data = res.json().get("data", {})
 
@@ -156,12 +166,14 @@ def payment_callback(request):
             )
             order.save()
 
-            # کاهش موجودی محصولات
+            # کاهش موجودی محصولات + ثبت آمار فروش
             for item in order.items.select_related("product"):
 
                 product = item.product
 
                 product.stock -= item.quantity
+
+                product.sales_count = (product.sales_count or 0) + item.quantity
 
                 if product.stock <= 0:
                     product.stock = 0
@@ -192,7 +204,8 @@ def payment_callback(request):
             invoice_id=order.invoice.id
         )
 
-    return HttpResponse(
-        f"تراکنش ناموفق ❌ - کد: {data.get('code')} - پیام: {data.get('message')}",
-        status=400,
+    messages.error(
+        request,
+        f"تراکنش ناموفق بود (کد {data.get('code')}). لطفاً دوباره تلاش کنید."
     )
+    return render(request, "payment/payment_error.html", {"order": order}, status=400)

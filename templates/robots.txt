@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /adminpanel/
+Disallow: /dashboard/
+Disallow: /cart/
+Disallow: /order/
+Disallow: /payment/
+Disallow: /accounts/
+Disallow: /rosetta/
+Disallow: /ckeditor5/
+
+Sitemap: https://exeexe.ir/sitemap.xml

@@ -18,7 +18,7 @@ def order_create_view(request):
 
 # اخطار و ریدارکت کردن کاربر در صورت خالی بودن سبد خرید
     if len(cart)== 0:
-        messages.warning(request, 'your cart is empty!')
+        messages.warning(request, 'سبد خرید شما خالی است!')
         return redirect('products:product_list')
     
 # ارسال سبد خرید و مشخصات سفارش به دیتابیس و پاک کردن سبد خرید
@@ -46,7 +46,7 @@ def order_create_view(request):
             request.user.last_name = order_obj.last_name
             request.user.save()
 
-            messages.success(request, 'yor order has successfuly placed.')
+            messages.success(request, 'سفارش شما با موفقیت ثبت شد.')
 
             request.session['order_id'] = order_obj.id
             return redirect('payment:payment_process')

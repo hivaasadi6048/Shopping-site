@@ -23,10 +23,10 @@ body.dark .image-manager-card {
 }
 
 .image-manager-header h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--blue);
+   margin: 0;
+   font-size: 22px;
+   font-weight: 800;
+   color: var(--primary);
 }
 
 /* =====================
@@ -99,31 +99,41 @@ body.dark .image-table thead {
 }
 
 .btn-primary {
-  background: var(--blue);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
 }
 
 .btn-secondary {
-  background: #e5e7eb;
-  color: #111;
-  padding: 8px 14px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
+    background: #e5e7eb;
+    color: #111;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    border: 1px solid #d1d5db;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
 }
 
 .btn-danger {
-  background: #dc2626;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
+    background: #dc2626;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
 }
 
 .inline-form {

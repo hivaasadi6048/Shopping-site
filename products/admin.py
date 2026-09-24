@@ -83,6 +83,7 @@ class BrandAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['product', 'author', 'stars', 'active', 'datetime_created']
+    list_editable = ['active']
     list_filter = ['active', 'stars', 'datetime_created']
     search_fields = ['product__title', 'author__username', 'body']
     ordering = ['-datetime_created']

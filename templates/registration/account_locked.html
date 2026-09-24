@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% block title %}حساب قفل شده | ZHIRO{% endblock %}
+{% block content %}
+<div class="page-wrap" style="max-width: 600px; margin: auto; text-align: center;">
+    <div class="detail-card">
+        <h1>⚠️ حساب شما قفل شد</h1>
+        <p>به دلیل تعداد زیادی تلاش ناموفق برای ورود، حساب شما به مدت ۵ دقیقه قفل شد.</p>
+        <p>لطفاً پس از مدت زمان مشخص، دوباره تلاش کنید.</p>
+        <a href="{% url 'account_login' %}" class="btn">بازگشت به صفحه ورود</a>
+    </div>
+</div>
+{% endblock %}

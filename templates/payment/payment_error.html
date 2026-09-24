@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+{% block title %}خطا در پرداخت | ZHIRO{% endblock %}
+{% block content %}
+<div class="page-wrap" style="max-width: 600px; margin: auto; text-align: center;">
+  <div class="detail-card">
+    <h1>⚠️ خطا در پرداخت</h1>
+    <p>مشکلی در ارتباط با درگاه پرداخت پیش آمد و پرداخت انجام نشد.</p>
+    <p>پولی از حساب شما کسر نشده است. لطفاً دوباره تلاش کنید.</p>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 16px;">
+      {% if order %}
+        <a href="{% url 'payment:payment_process' %}" class="btn">تلاش مجدد</a>
+      {% endif %}
+      <a href="{% url 'pages:home' %}" class="btn btn-secondary">بازگشت به خانه</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

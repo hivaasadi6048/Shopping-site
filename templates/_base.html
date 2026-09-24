@@ -4,7 +4,32 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}ZHIRO | فروشگاه لوازم جانبی{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}فروشگاه اینترنتی ZHIRO؛ خرید لوازم جانبی با قیمت مناسب و ارسال سریع{% endblock %}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ZHIRO">
+    <meta property="og:title" content="{% block og_title %}ZHIRO | فروشگاه لوازم جانبی{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}فروشگاه اینترنتی ZHIRO؛ خرید لوازم جانبی با قیمت مناسب و ارسال سریع{% endblock %}">
+    {% block og_image %}{% endblock %}
+
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ZHIRO",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ request.scheme }}://{{ request.get_host }}{% url 'products:product_list' %}?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 
     <!-- فقط CSS اختصاصی -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}?v=2">
@@ -19,6 +44,7 @@
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}?v=2">
 
+    {% block extra_head %}{% endblock %}
 </head>
 
 <body>
@@ -54,16 +80,15 @@
 
         <!-- ستون راست -->
         <div class="mega-sidebar">
-
             {% for parent in categories %}
-                <div
+                <a
                     class="sidebar-item {% if forloop.first %}active{% endif %}"
+                    href="{% url 'products:product_list' %}?category={{ parent.slug }}"
                     data-category="{{ parent.id }}"
                 >
                     {{ parent.title }}
-                </div>
+                </a>
             {% endfor %}
-
         </div>
 
         <!-- ستون چپ -->
@@ -291,7 +316,7 @@
 
   <!-- کپی‌رایت -->
   <div class="footer-bottom">
-    <p>© 2025 ZHIRO - تمامی حقوق محفوظ است.</p>
+    <p>© {% now "Y" %} ZHIRO - تمامی حقوق محفوظ است.</p>
   </div>
 </footer>
 

@@ -37,7 +37,7 @@ class OrderStatusForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
         labels = {
-            'status': 'Order Status',
+            'status': 'وضعیت سفارش',
         }
 
 

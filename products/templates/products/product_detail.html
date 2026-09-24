@@ -5,8 +5,29 @@
 {% load jalali_tags %}
 {% load comment_tags %}
 
+{% block title %}{{ product.title }} | ZHIRO{% endblock %}
+{% block meta_description %}{{ product.short_description|default:product.title|truncatechars:150 }}{% endblock %}
+{% block og_title %}{{ product.title }} | ZHIRO{% endblock %}
+{% block og_description %}{{ product.short_description|default:product.title|truncatechars:150 }}{% endblock %}
+{% block og_image %}{% if product.image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}">{% endif %}{% endblock %}
+
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/products.css' %}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ product.title|escapejs }}",
+  {% if product.image %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}",{% endif %}
+  "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "IRT",
+    "price": "{{ product.price }}",
+    "availability": "{% if product.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  }
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -36,7 +57,7 @@
                     {% else %}
                         <img
                             id="mainProductImage"
-                            src="{% static 'img/no-image.png' %}"
+                            src="{% static 'images/placeholder.jpg' %}"
                             alt="no image"
                         >
                     {% endif %}
@@ -117,13 +138,6 @@
                         {{ product.category }}
                     {% endif %}
                 </span>
-            </div>
-            {% endif %}
-
-            {% if product.size %}
-            <div class="spec-item">
-                <span class="spec-key">سایز:</span>
-                <span>{{ product.size }}</span>
             </div>
             {% endif %}
 

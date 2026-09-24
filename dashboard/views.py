@@ -92,7 +92,8 @@ def wishlist_view(request):
 @login_required
 def delete_address_view(request, pk):
 
-    address = Address.objects.get(
+    address = get_object_or_404(
+        Address,
         id=pk,
         user=request.user
     )

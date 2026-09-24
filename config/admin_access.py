@@ -1,6 +1,8 @@
 # core/admin_access.py
 from django.contrib import admin
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 def custom_admin_permission(request):
     """
@@ -16,8 +18,8 @@ def custom_admin_permission(request):
         return redirect('adminpanel:home')
 
     else:
-        # اگر لاگین نکرده → هدایت به صفحه‌ی لاگین
-        return redirect('account/login')
+        # اگر لاگین نکرده → هدایت به صفحه‌ی لاگین (با URL درست)
+        return HttpResponseRedirect(reverse('account_login'))
 
 # حالا تابع رو به admin site وصل می‌کنیم:
 admin.site.has_permission = custom_admin_permission

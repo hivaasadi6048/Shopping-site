@@ -6,11 +6,11 @@ from django.utils import timezone
 
 class AuditLog(models.Model):
     ACTION_CHOICES = (
-        ('CREATE', 'Create'),
-        ('UPDATE', 'Update'),
-        ('DELETE', 'Delete'),
-        ('LOGIN', 'Login'),
-        ('STATUS_CHANGE', 'Status Change'),
+        ('CREATE', 'ایجاد'),
+        ('UPDATE', 'ویرایش'),
+        ('DELETE', 'حذف'),
+        ('LOGIN', 'ورود'),
+        ('STATUS_CHANGE', 'تغییر وضعیت'),
     )
 
     user = models.ForeignKey(

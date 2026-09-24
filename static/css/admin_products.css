@@ -8,7 +8,8 @@
   --text: #1f2937;
   --muted: #6b7280;
   --border: #e5e7eb;
-  --primary: #2563eb;
+  --primary: #659287;
+  --primary-dark: #54786d;
   --success: #16a34a;
   --warning: #f59e0b;
   --danger: #dc2626;
@@ -98,79 +99,185 @@
 
 /* ---------- Actions ---------- */
 .admin-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.admin-actions form {
+    margin: 0;
+    padding: 0;
+    display: inline;
 }
 
 .admin-btn {
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: #fff;
-  cursor: pointer;
-  text-decoration: none;
-  color: var(--text);
-  transition: all 0.15s ease;
+    width: 100%;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.15s ease;
+    display: inline-block;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    font-family: inherit;
+    line-height: 1.4;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .admin-btn:hover {
-  background: #f3f4f6;
+    background: #f3f4f6;
 }
 
+/* Colored button variants — works for both <a> and <button> */
 .btn-edit { border-color: var(--primary); color: var(--primary); }
+.btn-edit:hover { background: var(--primary); color: #fff; }
+
 .btn-delete { border-color: var(--danger); color: var(--danger); }
-.btn-images { border-color: #0284c7; color: #0284c7; }
+.btn-delete:hover { background: var(--danger); color: #fff; }
+
+.btn-images { border-color: var(--primary); color: var(--primary); }
+.btn-images:hover { background: var(--primary); color: #fff; }
+
 .btn-specs { border-color: #6b7280; color: #6b7280; }
+.btn-specs:hover { background: #6b7280; color: #fff; }
 
 /* ---------- Add Product Button ---------- */
 .admin-add-btn {
-  margin-top: 16px;
-  display: inline-block;
-  background: var(--primary);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 800;
-  text-decoration: none;
+    margin-top: 16px;
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .admin-add-btn:hover {
-  background: #1e40af;
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* ---------- Mobile Fixed Add Button ---------- */
+@media (max-width: 768px) {
+    .admin-add-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto !important;
+        min-width: 150px !important;
+        max-width: 250px !important;
+        text-align: center;
+        z-index: 1000;
+        box-shadow: 0 8px 24px rgba(101, 146, 135, 0.4);
+        padding: 8px 16px !important;
+        font-size: 0.75rem !important;
+        border-radius: 8px !important;
+    }
+
+    .admin-add-btn:hover {
+        transform: translateX(-50%) translateY(-2px);
+    }
+
+    .admin-pagination {
+        margin-bottom: 100px;
+    }
 }
 
 /* ---------- Pagination ---------- */
 .admin-pagination {
-  margin: 24px 0;
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  flex-wrap: wrap;
+    margin: 24px 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .page-btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font-weight: 700;
-  text-decoration: none;
-  color: var(--text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text);
 }
 
 .page-btn.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* ---------- Table Wrapper ---------- */
+.admin-table-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+/* ---------- Table ---------- */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
 }
 
 /* ---------- Mobile Improvements ---------- */
 @media (max-width: 768px) {
-  .admin-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+    .admin-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-table {
+        min-width: unset;
+        font-size: 0.8rem;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .admin-product-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .admin-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .admin-actions .admin-btn {
+        width: auto;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .admin-actions form {
+        display: inline;
+    }
+
+    .status-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
 }
